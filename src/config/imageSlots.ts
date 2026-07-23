@@ -20,7 +20,7 @@ export const imageSlots: ImageSlots = {
   dynamicHeroBackgroundMobile: "/images/hero/hero-bg.jpg",
 
   // 누수 증상 이미지 슬롯
-  symptomSectionImage: null,           // 예: "/images/symptoms/symptom-main.jpg"
+  symptomSectionImage: "/images/symptoms/symptom-main.jpg",           // 예: "/images/symptoms/symptom-main.jpg"
 
   // 서비스 소개 이미지 슬롯
   serviceInspectionImage: null,        // 예: "/images/services/inspection.jpg"
