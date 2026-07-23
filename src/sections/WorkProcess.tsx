@@ -99,24 +99,24 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
   const regionName = region?.keywordName || "충북";
 
   return (
-    <section id="process" className="relative py-16 sm:py-24 w-full overflow-hidden bg-slate-950 text-white">
+    <section id="process" className="relative py-16 sm:py-24 w-full overflow-hidden bg-slate-900 text-white">
       
-      {/* 배경 이미지 레이어 (이미지가 있을 때만 노출) */}
+      {/* 배경 이미지 레이어 (원본 밝기 100% + 은은한 명도 보정) */}
       {desktopBg && (
         <div 
-          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-85 z-0"
+          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-100 brightness-110 contrast-105 z-0"
           style={{ backgroundImage: `url(${desktopBg})` }}
         />
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover bg-center pointer-events-none opacity-80 z-0"
+          className="absolute inset-0 block md:hidden bg-cover bg-center pointer-events-none opacity-100 brightness-110 contrast-105 z-0"
           style={{ backgroundImage: `url(${mobileBg})` }}
         />
       )}
 
-      {/* 브랜드 그라데이션 및 어두운 오버레이 레이어 (명도 대비 텍스트 가독성 확보) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950/80 z-10" />
+      {/* 브랜드 초투명 그라데이션 오버레이 (텍스트 가독성 최소 암막만 보장하고 이미지는 최상 노출) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-950/30 to-slate-950/70 z-10" />
 
       {/* 본문 콘텐츠 Container */}
       <div className="relative z-20 max-w-[1140px] mx-auto px-4 sm:px-6">
