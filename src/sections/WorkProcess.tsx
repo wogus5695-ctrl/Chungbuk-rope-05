@@ -16,7 +16,7 @@ function renderStepIcon(iconKey: string) {
     case "water":
     case "water-repellent":
       return (
-        <svg className="w-6 h-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-brand-accent" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
         </svg>
       );
@@ -27,7 +27,7 @@ function renderStepIcon(iconKey: string) {
     case "cutter":
     case "degrease":
       return (
-        <svg className="w-6 h-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-brand-accent" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
         </svg>
       );
@@ -44,7 +44,7 @@ function renderStepIcon(iconKey: string) {
     case "inject":
     case "repair":
       return (
-        <svg className="w-6 h-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-brand-accent" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M11 4a2 2 0 114 0v1a2 2 0 01-2 2H3a2 2 0 01-2-2V5a2 2 0 012-2h8zM4 11h16m-10 4h10m-5 4h5" />
         </svg>
       );
@@ -58,7 +58,7 @@ function renderStepIcon(iconKey: string) {
     case "flashing":
     case "paint-finish":
       return (
-        <svg className="w-6 h-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-brand-accent" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       );
@@ -75,7 +75,7 @@ function renderStepIcon(iconKey: string) {
     case "panel":
     default:
       return (
-        <svg className="w-6 h-6 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-brand-accent" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
       );
@@ -132,6 +132,54 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
           <p className="mt-3 text-sm sm:text-base text-gray-300 leading-relaxed">
             {processData.description}
           </p>
+        </div>
+
+        {/* [모바일 레이아웃] 세로형 타임라인 구조 (360px, 375px, 390px, 412px 대응) */}
+        <div className="block md:hidden relative pl-6 space-y-9">
+          
+          {/* 세로 연결선 (좌측 16px 위치, 01~03 연속 연결) */}
+          <div className="absolute top-4 bottom-6 left-[21px] w-[2px] bg-gradient-to-b from-brand-accent via-brand-accent/60 to-slate-700/40 z-0" />
+
+          {processData.steps.map((step, idx) => {
+            return (
+              <div key={idx} className="relative z-10 flex flex-col items-start pl-4">
+                
+                {/* 1행: 큰 숫자 + 아이콘 뱃지 인접 배치 (좌측 연결선 바로 옆) */}
+                <div className="flex items-center gap-3 mb-2.5">
+                  <span className="text-3xl font-black text-brand-accent tracking-tighter select-none font-mono">
+                    {step.number}
+                  </span>
+                  <div className="w-10 h-10 rounded-xl bg-slate-900/90 border border-slate-700/80 flex items-center justify-center shadow-inner">
+                    {renderStepIcon(step.icon)}
+                  </div>
+                </div>
+
+                {/* 2행: 단계 제목 (최대 2줄, 18~20px) */}
+                <h3 className="text-lg font-bold text-white mb-2 leading-snug tracking-tight">
+                  {step.title}
+                </h3>
+
+                {/* 3행: 단계 설명 (최대 3~4줄, 14~15px) */}
+                <p className="text-sm text-gray-300 leading-relaxed mb-3 line-clamp-4">
+                  {step.description}
+                </p>
+
+                {/* 4행: 주요 포인트 하이라이트 태그 (모바일 전용 간결 배치) */}
+                {step.highlights && step.highlights.length > 0 && (
+                  <ul className="space-y-1">
+                    {step.highlights.map((item, hIdx) => (
+                      <li key={hIdx} className="flex items-center gap-2 text-xs text-gray-400">
+                        <span className="w-1.5 h-1.5 rounded-full bg-brand-accent/80 flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+              </div>
+            );
+          })}
+
         </div>
 
         {/* [PC 레이아웃] 가로 타임라인 3단계 구조 (카드 테두리/흰색 박스 완전 제거) */}
