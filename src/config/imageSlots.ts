@@ -14,10 +14,10 @@ import { ImageSlots } from "@/types";
  */
 export const imageSlots: ImageSlots = {
   // HERO 섹션 이미지 슬롯
-  mainHeroBackgroundDesktop: null,     // 예: "/images/hero/main-bg-desktop.jpg"
-  mainHeroBackgroundMobile: null,      // 예: "/images/hero/main-bg-mobile.jpg"
-  dynamicHeroBackgroundDesktop: null,  // 예: "/images/hero/dynamic-bg-desktop.jpg"
-  dynamicHeroBackgroundMobile: null,   // 예: "/images/hero/dynamic-bg-mobile.jpg"
+  mainHeroBackgroundDesktop: "/images/hero/hero-bg.jpg",
+  mainHeroBackgroundMobile: "/images/hero/hero-bg.jpg",
+  dynamicHeroBackgroundDesktop: "/images/hero/hero-bg.jpg",
+  dynamicHeroBackgroundMobile: "/images/hero/hero-bg.jpg",
 
   // 누수 증상 이미지 슬롯
   symptomSectionImage: null,           // 예: "/images/symptoms/symptom-main.jpg"
