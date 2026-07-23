@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'S-CoreDream';
+  src: url('/fonts/SCDream3.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'S-CoreDream';
+  src: url('/fonts/SCDream5.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'S-CoreDream';
+  src: url('/fonts/SCDream7.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* 3. 브랜드 컬러 토큰 설정 */
+  --color-brand-primary: #0f172a; /* 신뢰감 있는 슬레이트/다크블루 (메인 텍스트 및 무거운 배경) */
+  --color-brand-accent: #2563eb;  /* 청량하고 전문적인 블루 (포인트 및 액션 버튼) */
+  --color-brand-accent-hover: #1d4ed8;
+  --color-kakao: #fee500;
+  --color-kakao-hover: #fdd835;
+  --font-sans: 'S-CoreDream', system-ui, sans-serif;
+
+  /* 4. 반응형 기준 설정 (모바일 360px~390px 우선 설계) */
+  --breakpoint-xs: 360px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #1f2937;
+  background-color: #f9fafb;
+  /* 모바일 360px 미만 화면에서도 깨지지 않도록 최소 너비 보장 */
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+/* 유틸리티 클래스 */
+.hero-gradient {
+  background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at bottom left, rgba(15, 23, 42, 0.03) 0%, transparent 50%);
+}
