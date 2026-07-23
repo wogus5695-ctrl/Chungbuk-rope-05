@@ -27,5 +27,5 @@ export const siteConfig: SiteConfig = {
   SEARCH_THUMBNAIL_HEIGHT: 630,
   SEARCH_THUMBNAIL_ALT: "충청북도 창틀코킹 및 빗물누수 전문 레인가드",
   MAIN_HERO_IMAGE: "/images/hero/rainguard-chungbuk-hero-v1.jpg",
-  baseUrl: "https://www.cbrainguard.co.kr"
+  baseUrl: "https://chungbuk-rope-05.vercel.app"
 };
