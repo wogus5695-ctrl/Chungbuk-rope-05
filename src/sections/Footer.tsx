@@ -72,43 +72,43 @@ export default function Footer({ region, service }: FooterProps) {
 
     const links: React.ReactNode[] = [];
     
-    // 1. 같은 상위 구/시/군 아래에 속한 형제(Sibling) 지역 링크 (최대 5개)
-    const siblings = regionsData
-      .filter(r => r.parentId === region.parentId && r.id !== region.id && r.isActive)
+    // 1. 같은 상위 구/시/군 아래에 속하며 동일한 regionType(동은 동끼리, 읍면은 읍면끼리)을 가진 실제 인접 형제 지역 링크 (최대 5개)
+    const sameTypeSiblings = regionsData
+      .filter(r => r.parentId === region.parentId && r.id !== region.id && r.regionType === region.regionType && r.isActive)
       .slice(0, 5);
 
-    siblings.forEach((sib) => {
+    sameTypeSiblings.forEach((sib) => {
       links.push(
         <a 
           key={`sib-${sib.id}`}
           href={getUrl(sib.keywordName, serviceName)}
           className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
         >
-          {sib.keywordName} {serviceName}
+          {sib.displayName} {serviceName}
         </a>
       );
     });
 
-    // 2. 만약 형제 지역 링크가 부족하다면, 같은 권역(provinceGroup)의 다른 시/군/구 링크 보충
+    // 2. 만약 동일 유형 형제 지역이 부족하다면, 같은 부모의 다른 유형 지역 링크 보충
     if (links.length < 5) {
-      const provinceSiblings = regionsData
-        .filter(r => r.provinceGroup === region.provinceGroup && r.parentId === null && r.id !== region.id && r.isActive)
+      const otherTypeSiblings = regionsData
+        .filter(r => r.parentId === region.parentId && r.id !== region.id && r.regionType !== region.regionType && r.isActive)
         .slice(0, 5 - links.length);
 
-      provinceSiblings.forEach((ps) => {
+      otherTypeSiblings.forEach((ots) => {
         links.push(
           <a 
-            key={`prov-${ps.id}`}
-            href={getUrl(ps.keywordName, serviceName)}
+            key={`ots-${ots.id}`}
+            href={getUrl(ots.keywordName, serviceName)}
             className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
           >
-            {ps.keywordName} {serviceName}
+            {ots.displayName} {serviceName}
           </a>
         );
       });
     }
 
-    // 3. 같은 지역(regionName)의 다른 추천 작업명 연동 링크 (3~4개)
+    // 3. 같은 지역(displayName)의 다른 추천 작업명 연동 링크 (4개)
     const otherServices = servicesData
       .filter(s => s.keyword !== serviceName)
       .slice(0, 4);
@@ -117,10 +117,10 @@ export default function Footer({ region, service }: FooterProps) {
       links.push(
         <a 
           key={`svc-${s.keyword}`}
-          href={getUrl(regionName, s.keyword)}
+          href={getUrl(region.keywordName, s.keyword)}
           className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
         >
-          {regionName} {s.keyword}
+          {region.displayName} {s.keyword}
         </a>
       );
     });

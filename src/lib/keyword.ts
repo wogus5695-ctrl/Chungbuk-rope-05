@@ -43,10 +43,9 @@ export function parseKeyword(k: string): ParsedKeywordResult | null {
       return null;
     }
 
-    // 3. 추출된 지역명이 승인된 지역 데이터에 1:1로 정확하게 존재하는지 검사
-    // 중복 방지 처리된 지역명(예: '청주중앙동', '제천중앙동')도 keywordName으로 정확히 매칭됩니다.
+    // 3. 추출된 지역명이 승인된 활성 지역 데이터에 1:1로 정확하게 존재하는지 검사
     const matchedRegion = regionsData.find(
-      (r) => r.keywordName === extractedRegionName
+      (r) => r.keywordName === extractedRegionName && r.isActive
     );
 
     if (!matchedRegion) {

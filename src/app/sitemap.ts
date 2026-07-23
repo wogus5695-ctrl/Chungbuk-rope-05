@@ -27,22 +27,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   ];
 
-  // B. 동적 키워드 페이지 목록 (171개 지역 * 13종 작업명 = 2,223개 조합)
-  // regionsData 및 servicesData 선언 순서대로 순회하여 출력 순서 유지
-  regionsData.forEach((reg) => {
-    servicesData.forEach((svc) => {
-      // 한글이 포함된 k 파라미터는 Next.js 내부적으로 출력 시 안전하게 1회 인코딩되므로, 
-      // 이중 인코딩이 발생하지 않도록 한글 디코딩된 순수 형태로 주소를 넘겨주면 
-      // Next.js XML 파서가 sitemap 생성 시 알아서 안전하게 URL 포맷팅을 완수합니다.
-      const paramK = `${reg.keywordName}-${svc.keyword}`;
-      sitemaps.push({
-        url: `${baseUrl}/?k=${paramK}`,
-        lastModified,
-        changeFrequency: "monthly",
-        priority: 0.6,
+  // B. 동적 키워드 페이지 목록 (443개 승인 지역 * 13종 작업명 = 5,759개 조합)
+  regionsData
+    .filter((reg) => reg.isActive)
+    .forEach((reg) => {
+      servicesData.forEach((svc) => {
+        const paramK = `${reg.keywordName}-${svc.keyword}`;
+        sitemaps.push({
+          url: `${baseUrl}/?k=${encodeURIComponent(paramK)}`,
+          lastModified,
+          changeFrequency: "monthly",
+          priority: 0.6,
+        });
       });
     });
-  });
 
   return sitemaps;
 }

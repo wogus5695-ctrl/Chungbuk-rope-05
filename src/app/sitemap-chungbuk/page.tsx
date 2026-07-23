@@ -25,7 +25,7 @@ export default function SitemapChungbukPage() {
   const guCount = activeRegions.filter(r => r.regionType === "district").length;
   const eupCount = activeRegions.filter(r => r.regionType === "eup").length;
   const myeonCount = activeRegions.filter(r => r.regionType === "myeon").length;
-  const dongCount = activeRegions.filter(r => r.regionType === "dong").length;
+  const dongCount = activeRegions.filter(r => r.regionType === "dong" && r.keywordSource === "official").length;
   
   const totalRegionsCount = activeRegions.length;
   const servicesCount = servicesData.length;

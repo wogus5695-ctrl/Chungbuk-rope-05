@@ -25,12 +25,15 @@ export interface SiteConfig {
 
 export type RegionType = "city" | "county" | "district" | "eup" | "myeon" | "dong";
 export type ProvinceGroup = "chungbuk" | "daejeon" | "sejong";
+export type KeywordSource = "official" | "mergedSearchName" | "consumerAlias";
 
 export interface DetailedRegion {
   id: string;
   keywordName: string;
+  displayName: string;
   formalName: string;
   regionType: RegionType;
+  keywordSource: KeywordSource;
   parentId: string | null;
   provinceGroup: ProvinceGroup;
   variantGroupId: string | null;
