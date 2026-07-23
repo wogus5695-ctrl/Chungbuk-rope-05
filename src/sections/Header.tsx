@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import ContactButton from "@/components/ContactButton";
 import { siteConfig } from "@/config/site";
 
@@ -12,7 +13,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
         
         {/* 좌측 레인가드 로고 & 심볼 */}
-        <a href="/" className="flex items-center gap-2 group select-none">
+        <Link href="/" className="flex items-center gap-2 group select-none">
           <img 
             src="/images/brand/rainguard-logo-symbol.png" 
             alt="레인가드 로고 심볼" 
@@ -26,7 +27,7 @@ export default function Header() {
               CHUNGBUK BRANCH
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* PC: 최소 네비게이션 및 우측 문의 버튼 그룹 */}
         <div className="hidden md:flex items-center gap-8">
