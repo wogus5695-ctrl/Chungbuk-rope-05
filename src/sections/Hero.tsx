@@ -78,7 +78,7 @@ export default function Hero({ region, service }: HeroProps) {
       {/* 3단계 & 8단계: 독립 배경 이미지 레이어 (PC / MO 분리 바인딩) */}
       {desktopBg && (
         <div 
-          className="absolute inset-0 hidden md:block bg-cover pointer-events-none opacity-50 z-0" 
+          className="absolute inset-0 hidden md:block bg-cover pointer-events-none opacity-85 z-0" 
           style={{ 
             backgroundImage: `url(${desktopBg})`,
             backgroundPosition: "left 20% center" // 작업자 위치가 우측/중앙에 잘 보이도록 맞춤
@@ -87,7 +87,7 @@ export default function Hero({ region, service }: HeroProps) {
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-45 z-0" 
+          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-80 z-0" 
           style={{ 
             backgroundImage: `url(${mobileBg})`,
             backgroundPosition: "left 15% center"
@@ -96,7 +96,7 @@ export default function Hero({ region, service }: HeroProps) {
       )}
 
       {/* 이미지가 없을 때를 대비한 모던 브랜드 그라데이션 오버레이 (명도 대비 확보용 암막 효과 통합) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent z-10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/40 to-transparent z-10" />
 
       {/* 본문 콘텐츠 (가로 스크롤 완전 방지) */}
       <div className="w-full max-w-7xl mx-auto px-4 relative z-20 py-16 sm:py-24">
