@@ -64,6 +64,22 @@ export interface CaseCard {
   desc: string;
 }
 
+export interface ProcessStep {
+  number: string;
+  icon: string;
+  title: string;
+  description: string;
+  highlights?: string[];
+}
+
+export interface ServiceProcess {
+  eyebrow: string;
+  title: string;
+  description: string;
+  steps: ProcessStep[];
+  notice: string;
+}
+
 export interface ServiceData {
   keyword: string;
   intentType: "silicone" | "leak" | "waterproof" | "crack";
