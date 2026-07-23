@@ -78,25 +78,25 @@ export default function Hero({ region, service }: HeroProps) {
       {/* 3단계 & 8단계: 독립 배경 이미지 레이어 (PC / MO 분리 바인딩) */}
       {desktopBg && (
         <div 
-          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-40 z-0" 
+          className="absolute inset-0 hidden md:block bg-cover pointer-events-none opacity-50 z-0" 
           style={{ 
             backgroundImage: `url(${desktopBg})`,
-            backgroundPosition: "center 30%" // 텍스트가 주요 부위를 덜 가리도록 위치 분리
+            backgroundPosition: "left 20% center" // 작업자 위치가 우측/중앙에 잘 보이도록 맞춤
           }}
         />
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover bg-center pointer-events-none opacity-30 z-0" 
+          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-45 z-0" 
           style={{ 
             backgroundImage: `url(${mobileBg})`,
-            backgroundPosition: "center 40%"
+            backgroundPosition: "left 15% center"
           }}
         />
       )}
 
       {/* 이미지가 없을 때를 대비한 모던 브랜드 그라데이션 오버레이 (명도 대비 확보용 암막 효과 통합) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-transparent z-10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/70 to-transparent z-10" />
 
       {/* 본문 콘텐츠 (가로 스크롤 완전 방지) */}
       <div className="w-full max-w-7xl mx-auto px-4 relative z-20 py-16 sm:py-24">
