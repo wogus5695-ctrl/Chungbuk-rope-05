@@ -104,13 +104,13 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
       {/* 배경 이미지 레이어 */}
       {desktopBg && (
         <div 
-          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-40 z-0"
+          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-65 z-0"
           style={{ backgroundImage: `url(${desktopBg})` }}
         />
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-40 z-0"
+          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-65 z-0"
           style={{ 
             backgroundImage: `url(${mobileBg})`,
             backgroundPosition: "right 0% top 20%" // 모바일(MO) 환경에서만 우측 상단 작업자의 뒷모습이 명확히 노출되도록 조정
@@ -118,8 +118,8 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
         />
       )}
 
-      {/* 브랜드 다크 그라데이션 오버레이 (가독성 완전 확보) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/85 to-slate-950 z-10" />
+      {/* 브랜드 다크 그라데이션 오버레이 (텍스트 가독성과 배경 은은함의 균형 감도 조정) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/75 via-slate-950/60 to-slate-950/80 z-10" />
 
       {/* 본문 콘텐츠 Container */}
       <div className="relative z-20 max-w-[1140px] mx-auto px-4 sm:px-6">
