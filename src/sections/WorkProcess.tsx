@@ -110,8 +110,11 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover bg-center pointer-events-none opacity-100 brightness-110 contrast-105 z-0"
-          style={{ backgroundImage: `url(${mobileBg})` }}
+          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-100 brightness-110 contrast-105 z-0"
+          style={{ 
+            backgroundImage: `url(${mobileBg})`,
+            backgroundPosition: "right 15% center" // 모바일 화면 우측에 작업자 모습이 시원하게 보이도록 위치 맞춤
+          }}
         />
       )}
 
