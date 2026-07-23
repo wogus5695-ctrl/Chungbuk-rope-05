@@ -104,19 +104,19 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
       {/* 배경 이미지 레이어 (이미지가 있을 때만 노출) */}
       {desktopBg && (
         <div 
-          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-40 z-0"
+          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-85 z-0"
           style={{ backgroundImage: `url(${desktopBg})` }}
         />
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover bg-center pointer-events-none opacity-30 z-0"
+          className="absolute inset-0 block md:hidden bg-cover bg-center pointer-events-none opacity-80 z-0"
           style={{ backgroundImage: `url(${mobileBg})` }}
         />
       )}
 
       {/* 브랜드 그라데이션 및 어두운 오버레이 레이어 (명도 대비 텍스트 가독성 확보) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-900/90 to-slate-950 z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/50 to-slate-950/80 z-10" />
 
       {/* 본문 콘텐츠 Container */}
       <div className="relative z-20 max-w-[1140px] mx-auto px-4 sm:px-6">
