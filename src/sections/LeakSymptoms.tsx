@@ -5,6 +5,7 @@ import SafeImage from "@/components/SafeImage";
 import ContactButton from "@/components/ContactButton";
 import { imageSlots } from "@/config/imageSlots";
 import { ServiceData, DetailedRegion } from "@/types";
+import { getSelfDiagnosisData } from "@/data/selfDiagnosis";
 
 interface LeakSymptomsProps {
   region?: DetailedRegion;
@@ -13,84 +14,75 @@ interface LeakSymptomsProps {
 
 export default function LeakSymptoms({ region, service }: LeakSymptomsProps) {
   const regionName = region?.keywordName || "충북";
-  const serviceName = service?.keyword || "빗물누수";
+  const serviceKeyword = service?.keyword || "샷시실리콘";
+  
+  // 1. 작업명별 전용 데이터 조회 (Fallback 없이 null 체크)
+  const diagnosisData = getSelfDiagnosisData(serviceKeyword);
 
-  const getFirstSymptom = () => {
-    if (!region || !service) {
-      return "창틀 주변 도배지 변색";
+  // 데이터 누락 시 안전한 처리 (개발 환경 경고 + 공개 화면 숨김)
+  if (!diagnosisData) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`[SelfDiagnosis] Missing self-diagnosis data for keyword: "${serviceKeyword}"`);
     }
-    if (region.id === "cheongju-si") {
-      return "청주시 아파트 세대별 창틀 벽지 곰팡이";
-    }
-    if (region.id === "cheongju") {
-      return "청주 시내 주택 및 아파트 샷시 주변 물샘 얼룩";
-    }
-    return `${region.keywordName} 지역 건물 빗물 유입으로 인한 도배지 변색`;
-  };
+    return null;
+  }
 
-  const getSymptomList = () => {
-    if (service && service.symptoms && service.symptoms.length >= 4) {
-      const items = [...service.symptoms];
-      items[0] = getFirstSymptom(); // 첫번째 아이템 교체
-      return items.slice(0, 4);
-    }
-    return [
-      getFirstSymptom(),
-      "베란다 천장 페인트 박리 및 도장면 부풀어 오름",
-      "노후 실리콘 갈라짐 및 코킹 접합부 이탈 현상",
-      "강풍이나 폭우 시 샷시 하단 콘크리트로 물 고임"
-    ];
-  };
-
-  const symptomsList = getSymptomList();
   const mainImage = imageSlots.symptomSectionImage;
-  const altText = region && service ? `${regionName} ${serviceName} 누수 증상 자가진단` : "누수 의심 증상";
+  const altText = region && service ? `${regionName} ${serviceKeyword} 누수 증상 자가진단` : "누수 의심 증상";
+
+  // 제목 및 보조 설명 동적 치환
+  const sectionTitle = diagnosisData.sectionTitle.replace("{region}", regionName);
+  const sectionDescription = diagnosisData.sectionDescription;
 
   return (
-    <section id="symptoms" className="py-12 sm:py-16 bg-white w-full overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="symptoms" className="py-10 sm:py-16 bg-white w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
-        {/* 섹션 헤더 (H2 사용) */}
-        <div className="text-center max-w-xl mx-auto mb-10 sm:mb-14">
-          <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight">
-            {region ? `${regionName} ${serviceName} 자가진단` : "이런 증상이 있다면 빗물누수 점검이 필요합니다"}
+        {/* 섹션 헤더 (H2 단일 노출) */}
+        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
+          <h2 className="text-[25px] xs:text-[27px] sm:text-[32px] md:text-[36px] font-[800] text-brand-primary tracking-tight leading-[1.25] mb-2 sm:mb-3">
+            {sectionTitle}
           </h2>
-          <p className="mt-2 text-xs xs:text-sm text-gray-500 leading-relaxed">
-            건물 내부 곰팡이와 마감재 변형이 시작되기 전에 문제를 빠르게 진단하세요.
+          <p className="text-[15px] sm:text-[16px] text-gray-600 leading-[1.5] max-w-md mx-auto">
+            {sectionDescription}
           </p>
         </div>
 
-        {/* 9단계: 이미지가 있을 때와 없을 때 레이아웃의 자연스러운 유연한 전환 */}
-        <div className={`grid grid-cols-1 ${mainImage ? "lg:grid-cols-12 gap-8" : "max-w-4xl mx-auto"} items-center mb-10`}>
+        {/* 메인 레이아웃: 이미지 좌측(5) + 증상 카드 2x2 우측(7) / MO 1열 구조 */}
+        <div className={`grid grid-cols-1 ${mainImage ? "lg:grid-cols-12 gap-6 lg:gap-8" : "max-w-4xl mx-auto"} items-center mb-8 sm:mb-10`}>
           
           {mainImage && (
-            <div className="lg:col-span-5 w-full">
+            <div className="lg:col-span-5 w-full mb-6 lg:mb-0">
               <SafeImage 
                 src={mainImage} 
                 alt={altText} 
                 aspectRatioClassName="aspect-[4/3] sm:aspect-video lg:aspect-square"
-                className="rounded-xl shadow-xs object-cover"
+                className="rounded-xl shadow-xs object-cover w-full"
               />
             </div>
           )}
 
           <div className={`${mainImage ? "lg:col-span-7" : "w-full"}`}>
-            {/* 카드 리스트: 모바일 1열/2열, PC 최대 4열 (이미지가 없을 때는 2열 그리드로 더 와이드하게 확장) */}
-            <div className={`grid gap-4 ${mainImage ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2"}`}>
-              {symptomsList.map((sym, idx) => (
+            {/* 카드 리스트: MO 1열 (gap 14~16px), PC 2x2 (gap 16~20px) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4.5">
+              {diagnosisData.symptoms.map((item, idx) => (
                 <div 
                   key={idx} 
-                  className="p-5 border border-slate-100/80 rounded-xl bg-slate-50/50 flex flex-col justify-start min-h-[110px]"
+                  className="p-5 sm:p-6 border border-slate-200/90 rounded-xl bg-slate-50/70 flex flex-col justify-start transition-shadow hover:shadow-sm"
                 >
-                  <span className="text-[10px] font-bold text-brand-accent mb-1.5 uppercase tracking-wider">
-                    증상 0{idx + 1}
+                  {/* 1. 증상 라벨 */}
+                  <span className="text-[14px] font-[800] text-brand-accent mb-1.5 uppercase tracking-wider">
+                    {item.label}
                   </span>
-                  {/* 카드 제목 H3 지정 */}
-                  <h3 className="font-bold text-sm xs:text-base text-brand-primary mb-1 select-none">
-                    {sym.split(" - ")[0]}
+
+                  {/* 2. 짧은 증상 제목 H3 */}
+                  <h3 className="font-[800] text-[18px] sm:text-[19px] lg:text-[20px] text-brand-primary mb-2 leading-[1.38] tracking-tight">
+                    {item.title}
                   </h3>
-                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
-                    비가 내리는 시점 전후로 나타나는 전형적인 징후입니다. 방치하면 건물 내장재 손상 범위가 확대됩니다.
+
+                  {/* 3. 원인/상태 설명 한 문장 */}
+                  <p className="text-[14px] sm:text-[15px] text-gray-600 leading-[1.5] line-clamp-2 font-normal">
+                    {item.description}
                   </p>
                 </div>
               ))}
@@ -99,17 +91,19 @@ export default function LeakSymptoms({ region, service }: LeakSymptomsProps) {
 
         </div>
 
-        {/* 하단 카카오톡 연결 짧은 CTA 배치 */}
-        <div className="text-center mt-6">
+        {/* 하단 카카오톡 연결 CTA 배치 */}
+        <div className="text-center mt-6 sm:mt-8">
           <ContactButton 
             type="kakao" 
             variant="secondary"
-            className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-yellow-50 hover:bg-yellow-100/80 text-yellow-800 text-[14px] font-bold rounded-lg border border-yellow-200 transition-colors shadow-xs"
+            aria-label="카카오톡으로 현장 사진 문의하기"
+            className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-yellow-50 hover:bg-yellow-100/80 text-yellow-900 text-[14px] sm:text-[15px] font-bold rounded-lg border border-yellow-200 transition-colors shadow-xs"
           >
-            <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-yellow-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 3c-4.97 0-9 3.185-9 7.11 0 2.51 1.66 4.723 4.18 5.922-.165.617-.6 2.25-.688 2.587-.13.51.173.5.364.372.15-.1.2.148 2.822-1.92.73.204 1.514.32 2.322.32 4.97 0 9-3.185 9-7.11S16.97 3 12 3z" />
             </svg>
-            <span>사진으로 현재 상태 문의하기</span>
+            <span className="block sm:hidden">사진으로 문의하기</span>
+            <span className="hidden sm:block">사진으로 현재 상태 문의하기</span>
           </ContactButton>
         </div>
 
