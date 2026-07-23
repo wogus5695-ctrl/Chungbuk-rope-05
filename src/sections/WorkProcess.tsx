@@ -99,27 +99,27 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
   const regionName = region?.keywordName || "충북";
 
   return (
-    <section id="process" className="relative py-16 sm:py-24 w-full overflow-hidden bg-slate-900 text-white">
+    <section id="process" className="relative py-16 sm:py-24 w-full overflow-hidden bg-slate-950 text-white">
       
-      {/* 배경 이미지 레이어 (원본 밝기 100% + 은은한 명도 보정) */}
+      {/* 배경 이미지 레이어 */}
       {desktopBg && (
         <div 
-          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-100 brightness-110 contrast-105 z-0"
+          className="absolute inset-0 hidden md:block bg-cover bg-center pointer-events-none opacity-40 z-0"
           style={{ backgroundImage: `url(${desktopBg})` }}
         />
       )}
       {mobileBg && (
         <div 
-          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-100 brightness-110 contrast-105 z-0"
+          className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-40 z-0"
           style={{ 
             backgroundImage: `url(${mobileBg})`,
-            backgroundPosition: "right 15% center" // 모바일 화면 우측에 작업자 모습이 시원하게 보이도록 위치 맞춤
+            backgroundPosition: "right 0% top 20%" // 모바일(MO) 환경에서만 우측 상단 작업자의 뒷모습이 명확히 노출되도록 조정
           }}
         />
       )}
 
-      {/* 브랜드 초투명 그라데이션 오버레이 (텍스트 가독성 최소 암막만 보장하고 이미지는 최상 노출) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-950/30 to-slate-950/70 z-10" />
+      {/* 브랜드 다크 그라데이션 오버레이 (가독성 완전 확보) */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/85 to-slate-950 z-10" />
 
       {/* 본문 콘텐츠 Container */}
       <div className="relative z-20 max-w-[1140px] mx-auto px-4 sm:px-6">
