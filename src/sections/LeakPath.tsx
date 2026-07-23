@@ -4,8 +4,7 @@ import React from "react";
 import SafeImage from "@/components/SafeImage";
 import ContactButton from "@/components/ContactButton";
 import { imageSlots } from "@/config/imageSlots";
-import { DetailedRegion } from "@/data/regions";
-import { ServiceData } from "@/types";
+import { ServiceData, DetailedRegion } from "@/types";
 
 interface LeakPathProps {
   region?: DetailedRegion;

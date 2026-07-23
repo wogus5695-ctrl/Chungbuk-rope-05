@@ -1,6 +1,6 @@
-import { regionsData, DetailedRegion } from "@/data/regions";
+import { regionsData } from "@/data/regions";
 import { servicesData } from "@/data/services";
-import { ServiceData } from "@/types";
+import { ServiceData, DetailedRegion } from "@/types";
 
 interface ParsedKeywordResult {
   region: DetailedRegion;

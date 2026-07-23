@@ -4,10 +4,10 @@ import React from "react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import ContactButton from "@/components/ContactButton";
-import { DetailedRegion, regionsData } from "@/data/regions";
+import { regionsData } from "@/data/regions";
 import { servicesData } from "@/data/services";
 import { imageSlots } from "@/config/imageSlots";
-import { ServiceData } from "@/types";
+import { ServiceData, DetailedRegion } from "@/types";
 
 interface FooterProps {
   region?: DetailedRegion;
@@ -41,16 +41,25 @@ export default function Footer({ region, service }: FooterProps) {
 
   // 관련 내부 링크 동적 생성 (6~10개 제한)
   const renderRegionLinks = () => {
+    // 공통 URL 생성 헬퍼
+    const getUrl = (regionKeyword: string, serviceKeyword: string) => {
+      return `/?k=${encodeURIComponent(`${regionKeyword}-${serviceKeyword}`)}`;
+    };
+
     if (!isDynamic) {
-      const primaryRegions = regionsData.filter(r => r.parentId === null && r.keywordVariantType === "formal");
+      // 메인 페이지일 때: 최상위 시/군 정식 명칭 10개 출력 (청주시, 충주시, 제천시, 대전시, 세종시 및 대표 군)
+      const primaryRegions = regionsData
+        .filter(r => r.parentId === null && (r.keywordName.endsWith("시") || r.keywordName.endsWith("군")))
+        .slice(0, 10);
+        
       return (
         <div className="mt-8 border-t border-gray-800/60 pt-6">
-          <span className="text-xs text-gray-500 font-semibold block mb-3">충청북도 전 지역 빗물누수·코킹 서비스 네트워크</span>
+          <span className="text-xs text-gray-500 font-semibold block mb-3">충북·대전·세종 전 지역 빗물누수·코킹 서비스 네트워크</span>
           <div className="flex flex-wrap gap-2 text-xs">
             {primaryRegions.map((r, idx) => (
               <a 
                 key={idx}
-                href={`/?k=${encodeURIComponent(`${r.keywordName}-빗물누수`)}`}
+                href={getUrl(r.keywordName, "빗물누수")}
                 className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
               >
                 {r.keywordName} 빗물누수
@@ -62,74 +71,68 @@ export default function Footer({ region, service }: FooterProps) {
     }
 
     const links: React.ReactNode[] = [];
-    const isCheongjuSi = region.id === "cheongju-si";
-    const isCheongju = region.id === "cheongju";
+    
+    // 1. 같은 상위 구/시/군 아래에 속한 형제(Sibling) 지역 링크 (최대 5개)
+    const siblings = regionsData
+      .filter(r => r.parentId === region.parentId && r.id !== region.id && r.isActive)
+      .slice(0, 5);
 
-    if (isCheongjuSi) {
-      const subGuList = regionsData.filter(r => r.parentId === "cheongju-si");
-      subGuList.forEach((gu, idx) => {
-        links.push(
-          <a 
-            key={`gu-${idx}`}
-            href={`/?k=${encodeURIComponent(`${gu.keywordName}-${serviceName}`)}`}
-            className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
-          >
-            {gu.keywordName} {serviceName}
-          </a>
-        );
-      });
-    } else if (isCheongju) {
-      const relativeServices = servicesData.filter(s => s.keyword !== serviceName).slice(0, 5);
-      relativeServices.forEach((s, idx) => {
-        links.push(
-          <a 
-            key={`service-${idx}`}
-            href={`/?k=${encodeURIComponent(`청주-${s.keyword}`)}`}
-            className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
-          >
-            청주 {s.keyword}
-          </a>
-        );
-      });
-    } else {
-      const siblingRegions = regionsData
-        .filter(r => r.parentId === region.parentId && r.id !== region.id && r.keywordVariantType === "formal")
-        .slice(0, 4);
-      
-      siblingRegions.forEach((sib, idx) => {
-        links.push(
-          <a 
-            key={`sib-${idx}`}
-            href={`/?k=${encodeURIComponent(`${sib.keywordName}-${serviceName}`)}`}
-            className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
-          >
-            {sib.keywordName} {serviceName}
-          </a>
-        );
-      });
+    siblings.forEach((sib) => {
+      links.push(
+        <a 
+          key={`sib-${sib.id}`}
+          href={getUrl(sib.keywordName, serviceName)}
+          className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
+        >
+          {sib.keywordName} {serviceName}
+        </a>
+      );
+    });
 
-      const otherServices = servicesData
-        .filter(s => s.keyword !== serviceName)
-        .slice(0, 3);
-      
-      otherServices.forEach((s, idx) => {
+    // 2. 만약 형제 지역 링크가 부족하다면, 같은 권역(provinceGroup)의 다른 시/군/구 링크 보충
+    if (links.length < 5) {
+      const provinceSiblings = regionsData
+        .filter(r => r.provinceGroup === region.provinceGroup && r.parentId === null && r.id !== region.id && r.isActive)
+        .slice(0, 5 - links.length);
+
+      provinceSiblings.forEach((ps) => {
         links.push(
           <a 
-            key={`other-svc-${idx}`}
-            href={`/?k=${encodeURIComponent(`${regionName}-${s.keyword}`)}`}
+            key={`prov-${ps.id}`}
+            href={getUrl(ps.keywordName, serviceName)}
             className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
           >
-            {regionName} {s.keyword}
+            {ps.keywordName} {serviceName}
           </a>
         );
       });
     }
 
+    // 3. 같은 지역(regionName)의 다른 추천 작업명 연동 링크 (3~4개)
+    const otherServices = servicesData
+      .filter(s => s.keyword !== serviceName)
+      .slice(0, 4);
+
+    otherServices.forEach((s) => {
+      links.push(
+        <a 
+          key={`svc-${s.keyword}`}
+          href={getUrl(regionName, s.keyword)}
+          className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
+        >
+          {regionName} {s.keyword}
+        </a>
+      );
+    });
+
+    // 최종 6~10개 범위로 엄격 제한 컷오프
+    const finalLinks = links.slice(0, 10);
+
     return (
       <div className="mt-8 border-t border-gray-800/60 pt-6">
         <span className="text-xs text-gray-500 font-semibold block mb-3">{regionName} 시공 지원 및 추천 네트워크</span>
         <div className="flex flex-wrap gap-2 text-xs">
-          {links.slice(0, 10)}
+          {finalLinks}
         </div>
       </div>
     );

@@ -23,6 +23,21 @@ export interface SiteConfig {
   baseUrl: string;
 }
 
+export type RegionType = "city" | "county" | "district" | "eup" | "myeon" | "dong";
+export type ProvinceGroup = "chungbuk" | "daejeon" | "sejong";
+
+export interface DetailedRegion {
+  id: string;
+  keywordName: string;
+  formalName: string;
+  regionType: RegionType;
+  parentId: string | null;
+  provinceGroup: ProvinceGroup;
+  variantGroupId: string | null;
+  sortOrder: number;
+  isActive: boolean;
+}
+
 export interface FAQItem {
   q: string;
   a: string;

@@ -1,6 +1,5 @@
 import React from "react";
-import { DetailedRegion } from "@/data/regions";
-import { ServiceData } from "@/types";
+import { ServiceData, DetailedRegion } from "@/types";
 
 interface FAQProps {
   region?: DetailedRegion;

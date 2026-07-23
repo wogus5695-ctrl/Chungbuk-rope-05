@@ -6,27 +6,28 @@ import Header from "@/sections/Header";
 import Footer from "@/sections/Footer";
 import SitemapSearchContainer from "@/components/SitemapSearchContainer";
 
+import { siteConfig } from "@/config/site";
+
 export const metadata: Metadata = {
-  title: "충북 동적 키워드 통합 sitemap 허브 | 레인가드",
-  description: "충청북도 전 지역 빗물누수, 창틀코킹, 방수 공사 키워드별 시공 서비스 바로가기 링크 인덱스 허브 페이지입니다.",
+  title: "충북·대전·세종 지역별 시공 서비스 통합 허브 | 레인가드",
+  description: "충북·대전·세종 지역의 창틀코킹·누수·방수 서비스 동적 키워드 목록입니다.",
   robots: "index, follow",
   alternates: {
-    canonical: "https://www.cbrainguard.co.kr/sitemap-chungbuk"
+    canonical: `${siteConfig.baseUrl}/sitemap-chungbuk`
   }
 };
 
 export default function SitemapChungbukPage() {
-  // 1. 상단 통계 수치 동적 연산
-  const formalRegions = regionsData.filter(r => r.keywordVariantType === "formal");
-  const aliasRegions = regionsData.filter(r => r.keywordVariantType === "alias");
+  // 1. 상단 통계 수치 동적 연산 (활성화된 지역 대상)
+  const activeRegions = regionsData.filter(r => r.isActive);
+  const provinceCount = Array.from(new Set(activeRegions.map(r => r.provinceGroup))).length;
+  const siGunCount = activeRegions.filter(r => r.regionType === "city" || r.regionType === "county").length;
+  const guCount = activeRegions.filter(r => r.regionType === "district").length;
+  const eupCount = activeRegions.filter(r => r.regionType === "eup").length;
+  const myeonCount = activeRegions.filter(r => r.regionType === "myeon").length;
+  const dongCount = activeRegions.filter(r => r.regionType === "dong").length;
   
-  const siGunCount = regionsData.filter(r => (r.regionType === "si" || r.regionType === "gun") && r.keywordVariantType === "formal").length;
-  const guCount = regionsData.filter(r => r.regionType === "gu").length;
-  const eupCount = regionsData.filter(r => r.regionType === "eup").length;
-  const myeonCount = regionsData.filter(r => r.regionType === "myeon").length;
-  const dongCount = regionsData.filter(r => r.regionType === "dong").length;
-  
-  const totalRegionsCount = regionsData.length;
+  const totalRegionsCount = activeRegions.length;
   const servicesCount = servicesData.length;
   const totalUrlsCount = totalRegionsCount * servicesCount;
 
@@ -39,21 +40,25 @@ export default function SitemapChungbukPage() {
         {/* 상단 타이틀 */}
         <div className="mb-8 text-center sm:text-left">
           <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight">
-            충북 지역별 시공 서비스 통합 허브
+            충북·대전·세종 지역별 시공 서비스 통합 허브
           </h1>
           <p className="text-xs sm:text-sm text-gray-500 mt-2 leading-relaxed">
-            충청북도 전체 행정구역에 대응하는 레인가드 방수 코킹 동적 키워드 인덱스 목록입니다.
+            충북·대전·세종 지역의 창틀코킹·누수·방수 서비스 동적 키워드 목록입니다.
           </p>
         </div>
 
-        {/* 12단계: 통계 요약 대시보드 */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-10">
+        {/* 통계 요약 대시보드 (9개 dynamic 카드로 개편) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3 mb-10">
+          <div className="bg-white p-4 rounded-xl border border-slate-200/60 text-center shadow-xs">
+            <span className="text-[10px] text-gray-400 font-bold block uppercase mb-1">서비스 권역</span>
+            <span className="text-lg font-extrabold text-brand-primary">{provinceCount}개</span>
+          </div>
           <div className="bg-white p-4 rounded-xl border border-slate-200/60 text-center shadow-xs">
             <span className="text-[10px] text-gray-400 font-bold block uppercase mb-1">시·군</span>
             <span className="text-lg font-extrabold text-brand-primary">{siGunCount}개</span>
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-200/60 text-center shadow-xs">
-            <span className="text-[10px] text-gray-400 font-bold block uppercase mb-1">구 (청주시)</span>
+            <span className="text-[10px] text-gray-400 font-bold block uppercase mb-1">구</span>
             <span className="text-lg font-extrabold text-brand-primary">{guCount}개</span>
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-200/60 text-center shadow-xs">
@@ -65,7 +70,7 @@ export default function SitemapChungbukPage() {
             <span className="text-lg font-extrabold text-brand-primary">{myeonCount}개</span>
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-200/60 text-center shadow-xs">
-            <span className="text-[10px] text-gray-400 font-bold block uppercase mb-1">동</span>
+            <span className="text-[10px] text-gray-400 font-bold block uppercase mb-1">법정동</span>
             <span className="text-lg font-extrabold text-brand-primary">{dongCount}개</span>
           </div>
           <div className="bg-white p-4 rounded-xl border border-slate-200/60 text-center shadow-xs">

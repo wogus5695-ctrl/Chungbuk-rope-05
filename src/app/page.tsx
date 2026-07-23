@@ -27,7 +27,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
       title: siteConfig.defaultTitle,
       description: siteConfig.defaultDescription,
       alternates: {
-        canonical: "https://www.cbrainguard.co.kr"
+        canonical: siteConfig.baseUrl
       }
     };
   }
@@ -59,7 +59,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
     ? `${region.keywordName} 시민들이 추천하는 ${service.keyword} 재누수 차단 정밀 코킹 및 방수 시공 견적 상담.`
     : `${region.formalName} ${service.keyword} 전문. 꼼꼼한 원인 진단과 친환경 자재 사용으로 완벽 방수 보장.`;
 
-  const canonicalUrl = `https://www.cbrainguard.co.kr/?k=${encodeURIComponent(k)}`;
+  const canonicalUrl = `${siteConfig.baseUrl}/?k=${encodeURIComponent(k)}`;
 
   return {
     title,
