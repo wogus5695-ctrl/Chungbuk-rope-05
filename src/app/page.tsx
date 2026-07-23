@@ -8,6 +8,7 @@ import Hero from "@/sections/Hero";
 import LeakSymptoms from "@/sections/LeakSymptoms";
 import LeakPath from "@/sections/LeakPath";
 import WorkCases from "@/sections/WorkCases";
+import WorkProcess from "@/sections/WorkProcess";
 import FAQ from "@/sections/FAQ";
 import Footer from "@/sections/Footer";
 import InteractiveCTA from "@/components/InteractiveCTA";
@@ -85,6 +86,7 @@ export default async function Home({ searchParams }: PageProps) {
           <LeakSymptoms />
           <LeakPath />
           <WorkCases />
+          <WorkProcess />
           <FAQ />
         </main>
         <Footer />
@@ -111,6 +113,7 @@ export default async function Home({ searchParams }: PageProps) {
         <LeakSymptoms region={region} service={service} />
         <LeakPath region={region} service={service} />
         <WorkCases region={region} service={service} />
+        <WorkProcess region={region} service={service} />
         <FAQ region={region} service={service} />
       </main>
       <Footer region={region} service={service} />

@@ -82,23 +82,6 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
     };
   }, [prefersReducedMotion, isPaused, casesData.length]);
 
-  // 3. 작업 과정 (processSteps) 데이터 바인딩
-  const defaultProcessSteps = [
-    { step: "01", name: "증상과 사진 확인", desc: "고객님이 보내주신 물샘 위치 사진을 분석하여 약식 누수 경로를 1차 판별합니다." },
-    { step: "02", name: "유입 가능 부위 점검", desc: "외벽 옹벽의 결함과 기존 코킹 박리율을 근거리에서 측정해 정확한 물길을 짚어냅니다." },
-    { step: "03", name: "필요한 범위 보수", desc: "문제 부위에 최적화된 규격 충진재와 우레탄 방수 도막을 사용해 깔끔하게 기밀 보수를 시행합니다." }
-  ];
-
-  const processSteps = service?.processSteps && service.processSteps.length >= 3
-    ? service.processSteps.slice(0, 3)
-    : defaultProcessSteps;
-
-  const processImages = [
-    imageSlots.processStep01Image,
-    imageSlots.processStep02Image,
-    imageSlots.processStep03Image
-  ];
-
   return (
     <section id="cases" className="py-12 sm:py-16 bg-white w-full overflow-hidden">
       <div className="max-w-7xl mx-auto px-4">
@@ -257,56 +240,6 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
             })}
           </div>
 
-        </div>
-
-        {/* 10단계: 섹션 5 - 작업 과정 (3단계 배치) */}
-        <div className="border-t border-slate-100 pt-16 max-w-5xl mx-auto">
-          <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-lg sm:text-2xl font-bold text-brand-primary">
-              레인가드 표준 3단계 작업 과정
-            </h2>
-            <p className="mt-2 text-xs xs:text-sm text-gray-500">
-              상담부터 마감까지 투명하고 꼼꼼하게 처리해드립니다.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {processSteps.map((step, idx) => {
-              const processImg = processImages[idx];
-              
-              return (
-                <div key={idx} className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="w-8 h-8 rounded-full bg-brand-accent text-white flex items-center justify-center font-bold text-sm">
-                        {idx + 1}
-                      </span>
-                      <h3 className="font-bold text-sm xs:text-base text-brand-primary">
-                        {step.name}
-                      </h3>
-                    </div>
-
-                    {/* 과정 이미지 슬롯 연동 (없을 때는 깔끔한 아이콘/안내 레이아웃 대체) */}
-                    <div className="mb-4">
-                      {processImg ? (
-                        <SafeImage src={processImg} alt={`${step.name} 과정`} aspectRatioClassName="aspect-video" />
-                      ) : (
-                        <div className="w-full bg-slate-100 border border-slate-200/40 rounded-xl aspect-video flex items-center justify-center">
-                          <svg className="w-8 h-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                          </svg>
-                        </div>
-                      )}
-                    </div>
-
-                    <p className="text-xs xs:text-sm text-gray-600 leading-relaxed">
-                      {step.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
 
       </div>
