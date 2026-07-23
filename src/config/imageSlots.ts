@@ -34,10 +34,12 @@ export const imageSlots: ImageSlots = {
   case03BeforeImage: null,             // 예: "/images/cases/case03-before.jpg"
   case03AfterImage: null,              // 예: "/images/cases/case03-after.jpg"
 
-  // 공정 단계 이미지 슬롯
+  // 공정 단계 및 섹션 배경 이미지 슬롯
   processStep01Image: null,            // 예: "/images/process/step01.jpg"
   processStep02Image: null,            // 예: "/images/process/step02.jpg"
   processStep03Image: null,            // 예: "/images/process/step03.jpg"
+  workProcessBackgroundDesktop: null,  // 예: "/images/process/process-bg-desktop.jpg"
+  workProcessBackgroundMobile: null,   // 예: "/images/process/process-bg-mobile.jpg"
 
   // 최종 CTA 배경 이미지 슬롯
   finalCtaBackgroundImage: null,       // 예: "/images/cta/final-cta-bg.jpg"

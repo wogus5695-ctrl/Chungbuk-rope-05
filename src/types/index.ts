@@ -121,6 +121,8 @@ export interface ImageSlots {
   processStep01Image: string | null;
   processStep02Image: string | null;
   processStep03Image: string | null;
+  workProcessBackgroundDesktop: string | null;
+  workProcessBackgroundMobile: string | null;
   finalCtaBackgroundImage: string | null;
   naverSearchThumbnailImage: string | null;
   openGraphThumbnailImage: string | null;
