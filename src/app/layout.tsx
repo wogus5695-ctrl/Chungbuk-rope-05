@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     // 플레이스홀더 처리
     google: "GOOGLE_VERIFICATION_PLACEHOLDER",
     other: {
-      "naver-site-verification": "NAVER_VERIFICATION_PLACEHOLDER"
+      "naver-site-verification": "9ed71c763b5fa16ca9a0791fe0f59d6f0821f772"
     }
   },
   icons: {
