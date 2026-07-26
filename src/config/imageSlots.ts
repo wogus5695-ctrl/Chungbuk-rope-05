@@ -46,5 +46,12 @@ export const imageSlots: ImageSlots = {
 
   // SEO 검색 관련 이미지 슬롯
   naverSearchThumbnailImage: null,     // 예: "/images/seo/naver-thumbnail.jpg"
-  openGraphThumbnailImage: null        // 예: "/images/seo/og-thumbnail.jpg"
+  openGraphThumbnailImage: null,       // 예: "/images/seo/og-thumbnail.jpg"
+
+  // 5대 현장 시공 사례 전용 이미지 슬롯
+  caseApartmentWindowCaulking: "/images/cases/case-apartment-window-caulking.jpg",
+  caseFactoryExteriorCrackWaterproofing: "/images/cases/case-factory-exterior-crack-waterproofing.jpg",
+  caseCommercialBuildingIntegratedWaterproofing: "/images/cases/case-commercial-building-integrated-waterproofing.jpg",
+  caseVillaExteriorCoatingWaterproofing: "/images/cases/case-villa-exterior-coating-waterproofing.jpg",
+  caseRooftopPlanterWaterproofing: "/images/cases/case-rooftop-planter-waterproofing.jpg"
 };

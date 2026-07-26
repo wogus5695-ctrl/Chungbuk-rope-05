@@ -1,212 +1,311 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import SafeImage from "@/components/SafeImage";
 import { imageSlots } from "@/config/imageSlots";
-import { ServiceData, DetailedRegion } from "@/types";
+import { siteConfig } from "@/config/site";
+import { ServiceData, DetailedRegion, WorkCase, ImageSlots } from "@/types";
+import { workCases } from "@/data/workCases";
 
 interface WorkCasesProps {
   region?: DetailedRegion;
   service?: ServiceData;
 }
 
-export interface WorkCaseItem {
-  id: string;
-  title: string;
-  serviceTypes: string[];
-  region?: string;
-  buildingType: string;
-  symptom: string;
-  point: string;
-  work: string;
-  result: string;
-  summary: string;
-  beforeImg?: string | null;
-  afterImg?: string | null;
-}
-
-// 13개 전체 작업명과 100% 매칭되는 표준 시공 사례 데이터셋
-const masterCases: WorkCaseItem[] = [
-  {
-    id: "case-silicone-01",
-    title: "창틀 노후 실리콘 전면 제거 및 고신축 코킹 시공",
-    serviceTypes: ["창틀코킹", "창틀실리콘", "샷시실리콘", "창틀누수"],
-    buildingType: "아파트",
-    summary: "노후 삭은 실리콘 긁어냄 후 프라이머 도포 및 광폭 헤라 압착",
-    symptom: "비바람 시 베란다 창틀 하단 도배지 젖음 현상",
-    point: "자외선 경화로 외부 샷시 실리콘 틈새 균열 박리",
-    work: "노후 실리콘 전면 칼 절삭 제거 후 우레탄 실란트 도포",
-    result: "집중 호우 시에도 빗물 누수 차단 확인",
-    beforeImg: imageSlots.case01BeforeImage,
-    afterImg: imageSlots.case01AfterImage
-  },
-  {
-    id: "case-exterior-01",
-    title: "외벽 옹벽 균열 V-Cutting 및 탄성 퍼티 방수",
-    serviceTypes: ["외벽누수", "외벽방수", "외벽크랙보수", "건물방수"],
-    buildingType: "상가 빌딩",
-    summary: "외벽 수직 균열 V-컷팅 홈파기 및 탄성 퍼티 충진",
-    symptom: "외벽 틈새로 상층부 수분이 하층 천장으로 스며듦",
-    point: "층간 옹벽 조인트의 세로 방향 크랙 유입로",
-    work: "고공 로프 작업 통한 V-Cut 그라인딩 및 탄성 메움",
-    result: "천장 수분 스며듦 차단 및 골조 강도 보강",
-    beforeImg: imageSlots.case02BeforeImage,
-    afterImg: imageSlots.case02AfterImage
-  },
-  {
-    id: "case-roof-01",
-    title: "지붕 아스팔트 슁글 밀착 고정 및 후레싱 기밀 시공",
-    serviceTypes: ["지붕방수", "판넬방수", "빗물누수"],
-    buildingType: "주택/빌라",
-    summary: "슁글 이격 부틸 테이프 보강 및 용마루 마스틱 충진",
-    symptom: "다락방 천장 및 탑층 물방울 낙수 현상",
-    point: "지붕 슁글 유실 및 후레싱 이음매 빗물 유입",
-    work: "지붕 전용 코팅 도막 피복 및 후레싱 실링",
-    result: "탑층 낙수 현상 즉시 중단 및 피복 유지",
-    beforeImg: imageSlots.case03BeforeImage,
-    afterImg: imageSlots.case03AfterImage
-  },
-  {
-    id: "case-rooftop-01",
-    title: "옥상 바닥 슬래브 연삭 및 탄성 우레탄 3차 도포",
-    serviceTypes: ["옥상방수", "우레탄방수", "건물방수"],
-    buildingType: "상가 아파트",
-    summary: "삭은 바닥 방수층 연삭 면갈이 후 하도·중도·상도 타설",
-    symptom: "최상층 천장 빗물 고임 및 배수구 주변 수분 침투",
-    point: "옥상 슬래브 거북이등 크랙 및 기존 도막 부풀어 오름",
-    work: "바닥 바탕 연삭 가공 후 고탄성 우레탄 타설 마감",
-    result: "옥상 바닥 고무 도막 방수막 형성 완료",
-    beforeImg: imageSlots.case01BeforeImage,
-    afterImg: imageSlots.case01AfterImage
-  },
-  {
-    id: "case-panel-01",
-    title: "조립식 판넬 이음부 부틸 시트 및 볼트 전용 캡 방수",
-    serviceTypes: ["판넬방수", "지붕방수", "빗물누수"],
-    buildingType: "공장/창고",
-    summary: "판넬 지붕 나사못 전수 캡 충진 및 용마루 부틸 실링",
-    symptom: "강풍 폭우 시 공장 지붕 볼트 구멍 빗물 낙수",
-    point: "판넬 결속 나사 고무 와셔 부식 및 열팽창 수축 틈새",
-    work: "볼트 헤드 녹 제거 후 볼트 캡 충진 및 씰 마스틱 마감",
-    result: "공장 지붕 볼트 빗물 낙수 차단 완료",
-    beforeImg: imageSlots.case02BeforeImage,
-    afterImg: imageSlots.case02AfterImage
-  },
-  {
-    id: "case-rain-01",
-    title: "비바람 들이침 빗물 유입로 3중 기밀 밀봉 시공",
-    serviceTypes: ["빗물누수", "창틀누수", "외벽누수"],
-    buildingType: "아파트/빌라",
-    summary: "바람 방향 고려 샷시 및 외벽 조인트 3중 침투 차단",
-    symptom: "태풍 및 강풍 빗물 들이침 시 창틀 하부 스며듦",
-    point: "풍압에 의한 외벽 미세 틈새 빗물 역류 유입",
-    work: "외벽 침투 방수 및 창호 주변 전용 실란트 도포",
-    result: "태풍 및 폭우 시 빗물 스며듦 차단 확인",
-    beforeImg: imageSlots.case03BeforeImage,
-    afterImg: imageSlots.case03AfterImage
-  }
-];
-
 export default function WorkCases({ region, service }: WorkCasesProps) {
-  const regionName = region?.keywordName || "충북";
   const serviceKeyword = service?.keyword || "빗물누수";
   const isDynamic = !!region && !!service;
 
-  // 작업명별 시공 사례 필터링 및 우선순위 정렬
-  const exactMatches = masterCases.filter(c => c.serviceTypes.includes(serviceKeyword));
-  const relatedMatches = masterCases.filter(c => !c.serviceTypes.includes(serviceKeyword));
+  // 1. 노출 가능 사례 필터링 및 sortOrder 기준 기본 정렬
+  const activeCases = [...workCases]
+    .filter(c => c.isActive !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+
+  // 2. 판넬방수 / 지붕방수 등 보조 노출 우선순위 설정
+  let fallbackPreferredId: string | null = null;
+  if (serviceKeyword === "판넬방수") {
+    fallbackPreferredId = "factory-exterior-crack-waterproofing";
+  } else if (serviceKeyword === "지붕방수") {
+    fallbackPreferredId = "commercial-building-integrated-waterproofing";
+  }
+
+  // 3. 작업명별 사례 우선순위 그룹 분류 (1: 동일 -> 2: 관련 -> 3: 기타)
+  const exactMatches = activeCases.filter(c => c.serviceTypes?.includes(serviceKeyword));
+  const relatedMatches = activeCases.filter(c => 
+    !c.serviceTypes?.includes(serviceKeyword) && c.relatedServiceTypes?.includes(serviceKeyword)
+  );
+  let otherMatches = activeCases.filter(c => 
+    !c.serviceTypes?.includes(serviceKeyword) && !c.relatedServiceTypes?.includes(serviceKeyword)
+  );
+
+  // 보조 노출 선호 사례가 지정된 경우 기타 그룹 내 최상단 배치
+  if (fallbackPreferredId) {
+    const preferred = otherMatches.filter(c => c.id === fallbackPreferredId);
+    const rest = otherMatches.filter(c => c.id !== fallbackPreferredId);
+    otherMatches = [...preferred, ...rest];
+  }
+
+  // 4. 중복 사례 ID 차단 및 최종 렌더링 순서 확정 (Set 활용, 중복 0개 보장)
+  const seenIds = new Set<string>();
+  const displayCases: WorkCase[] = [];
   
-  // 최종 3개 사례 확정 (중복 ID 0개 보장)
-  const displayCases = [...exactMatches, ...relatedMatches].slice(0, 3);
-
-  // 표시 문구 결정 헬퍼 (실제 작업 사례 vs 동일 작업 사례 vs 유사 작업 사례)
-  const getBadgeLabel = (item: WorkCaseItem) => {
-    const isExactService = item.serviceTypes.includes(serviceKeyword);
-    const isExactRegion = item.region === regionName;
-
-    if (isExactService && isExactRegion) {
-      return "실제 작업 사례";
+  for (const item of [...exactMatches, ...relatedMatches, ...otherMatches]) {
+    if (!seenIds.has(item.id)) {
+      seenIds.add(item.id);
+      displayCases.push(item);
     }
-    if (isExactService) {
+  }
+
+  // 대표 사례 1개 + 보조 사례 4개 분리 (총 5개 사례)
+  const heroCase = displayCases[0];
+  const secondaryCases = displayCases.slice(1, 5);
+
+  // 5. 표시 라벨 규칙 (동일 작업 사례 / 관련 작업 사례 / 유사 작업 사례)
+  const getBadgeLabel = (item: WorkCase) => {
+    if (item.serviceTypes?.includes(serviceKeyword)) {
       return "동일 작업 사례";
+    }
+    if (item.relatedServiceTypes?.includes(serviceKeyword)) {
+      return "관련 작업 사례";
     }
     return "유사 작업 사례";
   };
 
   return (
     <section id="cases" className="py-12 sm:py-16 bg-white w-full overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* 섹션 헤더 */}
-        <div className="text-center max-w-xl mx-auto mb-10">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
           <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight">
-            {isDynamic ? `${serviceKeyword} 시공 사례` : "레인가드 현장 시공 사례"}
+            {isDynamic ? `${serviceKeyword} 현장 시공 사례` : "레인가드 현장 시공 사례"}
           </h2>
-          <p className="mt-2 text-xs xs:text-sm text-gray-500 leading-relaxed">
-            {isDynamic 
-              ? `${regionName} 지역 고객님의 의사결정을 돕는 ${serviceKeyword} 전문 시공 사례입니다.`
-              : "충북 전역 아파트, 빌라, 상가 건물의 신뢰할 수 있는 완공 기록을 소개합니다."}
+          <p className="mt-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
+            창틀 코킹부터 외벽·옥상방수까지, 건물별 누수 취약부와 실제 작업 내용을 소개합니다.
           </p>
         </div>
 
-        {/* DOM 중복 렌더링 없는 단일 응답형 3열 격자 레이아웃 */}
-        <div className="max-w-5xl mx-auto mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {displayCases.map((item) => {
-              const hasImages = !!item.beforeImg || !!item.afterImg;
-              const badgeText = getBadgeLabel(item);
+        {/* 사례 목록이 없는 경우 (방어용) */}
+        {displayCases.length === 0 ? (
+          <div className="max-w-md mx-auto text-center py-12 px-6 bg-slate-50 rounded-2xl border border-slate-200/70">
+            <p className="text-sm text-gray-500 font-medium">
+              현재 {serviceKeyword} 관련 현장 시공 사례를 정리 중입니다.
+            </p>
+          </div>
+        ) : (
+          /* 반응형 단일 DOM 구조: PC(대표1개 + 2x2보조4개) / MO(1열) */
+          <div className="space-y-6 sm:space-y-8">
+            
+            {/* 1. 대표 사례 카카오/PC 대형 카드 */}
+            {heroCase && (() => {
+              const heroBadgeText = getBadgeLabel(heroCase);
+              const heroImageUrl = heroCase.imageKey && heroCase.imageKey in imageSlots
+                ? imageSlots[heroCase.imageKey as keyof ImageSlots]
+                : null;
+              const isVilla = heroCase.id === "villa-exterior-coating-waterproofing";
 
               return (
-                <div 
-                  key={item.id}
-                  className="bg-slate-50 border border-slate-200/70 rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:shadow-xs transition-shadow min-h-[420px]"
-                >
-                  <div>
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-[10px] font-bold text-brand-accent bg-blue-50 px-2 py-0.5 rounded-md">
-                        {item.buildingType}
-                      </span>
-                      <span className="text-[10px] text-gray-500 font-semibold bg-gray-100 px-2 py-0.5 rounded-md">
-                        {badgeText}
-                      </span>
+                <div className="bg-slate-50 border border-slate-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-7 hover:shadow-md transition-shadow">
+                  {/* PC: 2열 배치 / MO: 1열 배치 */}
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
+                    
+                    {/* 대표 이미지 영역 */}
+                    <div className="md:col-span-5 lg:col-span-5 w-full">
+                      {heroImageUrl && (
+                        <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200/60 shadow-xs">
+                          <SafeImage 
+                            src={heroImageUrl} 
+                            alt={heroCase.alt || heroCase.title} 
+                            aspectRatioClassName="aspect-4/3 md:aspect-3/2" 
+                            className={isVilla ? "object-top" : "object-center"}
+                          />
+                          {heroCase.isVerified && (
+                            <span className="absolute top-3 left-3 bg-blue-600/90 text-white text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-md backdrop-blur-xs shadow-xs">
+                              현장 실사 인증
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
 
-                    <h3 className="font-extrabold text-sm xs:text-base text-brand-primary mb-3 leading-snug">
-                      {item.title}
-                    </h3>
+                    {/* 대표 정보 영역 */}
+                    <div className="md:col-span-7 lg:col-span-7 flex flex-col justify-between h-full">
+                      <div>
+                        {/* 태그 & 뱃지 */}
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                          <span className="text-xs font-bold text-brand-accent bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-md">
+                            {heroCase.buildingType}
+                          </span>
+                          <span className="text-xs text-gray-600 font-semibold bg-white border border-slate-200/80 px-2.5 py-0.5 rounded-md">
+                            {heroBadgeText}
+                          </span>
+                          {heroCase.categoryLabels.map((tag, idx) => (
+                            <span key={idx} className="hidden sm:inline-block text-[11px] text-gray-400 font-medium">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
 
-                    {/* 비포/애프터 이미지 */}
-                    {hasImages && (
-                      <div className="grid grid-cols-2 gap-2 mb-4">
-                        {item.beforeImg && (
-                          <div>
-                            <div className="text-[9px] text-gray-400 font-bold mb-0.5">시공 전 (Before)</div>
-                            <SafeImage src={item.beforeImg} alt={`${item.title} 시공 전`} aspectRatioClassName="aspect-square" />
-                          </div>
+                        {/* 대표 사례 제목 */}
+                        <h3 className="font-extrabold text-lg sm:text-2xl lg:text-3xl text-brand-primary mb-3 leading-snug tracking-tight">
+                          {heroCase.title}
+                        </h3>
+
+                        {/* 모바일 요약 */}
+                        {heroCase.mobileSummary && (
+                          <p className="text-xs sm:text-sm text-gray-600 mb-4 bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed">
+                            {heroCase.mobileSummary}
+                          </p>
                         )}
-                        {item.afterImg && (
-                          <div>
-                            <div className="text-[9px] text-brand-accent font-bold mb-0.5">시공 후 (After)</div>
-                            <SafeImage src={item.afterImg} alt={`${item.title} 시공 후`} aspectRatioClassName="aspect-square" />
+
+                        {/* 상세 내역 (PC는 항상 표시, MO는 details 접힘 가능) */}
+                        <div className="hidden md:block space-y-2 text-xs sm:text-sm text-gray-700 bg-white p-4 rounded-xl border border-slate-200/60">
+                          <p><strong className="text-brand-primary font-bold">확인 증상:</strong> {heroCase.symptom}</p>
+                          <p><strong className="text-brand-primary font-bold">점검 내용:</strong> {heroCase.inspection}</p>
+                          <p><strong className="text-brand-primary font-bold">시공 작업:</strong> {heroCase.work}</p>
+                        </div>
+
+                        {/* 모바일 전용 접힘 세부정보 (<details> 활용으로 초기 HTML 포함) */}
+                        <details className="md:hidden group mt-3 pt-3 border-t border-slate-200/60">
+                          <summary className="text-xs text-brand-accent font-bold cursor-pointer flex items-center justify-between list-none select-none py-1">
+                            <span>원인 점검 및 시공 세부내역</span>
+                            <svg className="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </summary>
+                          <div className="mt-2.5 space-y-2 text-xs text-gray-700 bg-white p-3.5 rounded-xl border border-slate-200/60 leading-relaxed">
+                            <p><strong className="text-brand-primary">확인 증상:</strong> {heroCase.symptom}</p>
+                            <p><strong className="text-brand-primary">점검 내용:</strong> {heroCase.inspection}</p>
+                            <p><strong className="text-brand-primary">시공 작업:</strong> {heroCase.work}</p>
                           </div>
-                        )}
+                        </details>
                       </div>
-                    )}
 
-                    <div className="space-y-1.5 text-xs text-gray-600">
-                      <p><strong>의심 증상:</strong> {item.symptom}</p>
-                      <p><strong>점검 원인:</strong> {item.point}</p>
-                      <p><strong>시공 작업:</strong> {item.work}</p>
+                      {/* 결과 마감 */}
+                      <div className="mt-4 pt-3 border-t border-slate-200/80 flex justify-between items-center text-xs sm:text-sm">
+                        <span className="text-gray-500 font-semibold">시공 결과</span>
+                        <span className="font-extrabold text-brand-accent">{heroCase.result}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs">
-                    <span className="text-gray-400">결과</span>
-                    <span className="font-bold text-brand-accent">{item.result}</span>
                   </div>
                 </div>
               );
-            })}
+            })()}
+
+            {/* 2. 보조 사례 4개 그리드 (PC 2x2 / MO 1열) */}
+            {secondaryCases.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {secondaryCases.map((item) => {
+                  const badgeText = getBadgeLabel(item);
+                  const caseImageUrl = item.imageKey && item.imageKey in imageSlots 
+                    ? imageSlots[item.imageKey as keyof ImageSlots] 
+                    : null;
+                  const isVilla = item.id === "villa-exterior-coating-waterproofing";
+
+                  return (
+                    <div 
+                      key={item.id}
+                      className="bg-slate-50 border border-slate-200/70 rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:shadow-xs transition-shadow"
+                    >
+                      <div>
+                        {/* 헤더 태그 및 뱃지 */}
+                        <div className="flex justify-between items-center mb-3">
+                          <span className="text-[11px] font-bold text-brand-accent bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-md">
+                            {item.buildingType}
+                          </span>
+                          <span className="text-[11px] text-gray-600 font-semibold bg-white border border-slate-200/80 px-2.5 py-0.5 rounded-md">
+                            {badgeText}
+                          </span>
+                        </div>
+
+                        {/* 보조 사례 제목 */}
+                        <h3 className="font-extrabold text-base sm:text-xl text-brand-primary mb-3 leading-snug">
+                          {item.title}
+                        </h3>
+
+                        {/* 이미지 렌더링 */}
+                        {caseImageUrl && (
+                          <div className="mb-4 overflow-hidden rounded-xl border border-slate-200/60 shadow-xs">
+                            <SafeImage 
+                              src={caseImageUrl} 
+                              alt={item.alt || item.title} 
+                              aspectRatioClassName="aspect-4/3" 
+                              className={isVilla ? "object-top" : "object-center"}
+                            />
+                          </div>
+                        )}
+
+                        {/* 모바일 축약 요약 */}
+                        {item.mobileSummary && (
+                          <p className="text-xs sm:text-sm text-gray-600 mb-3 bg-white p-2.5 rounded-lg border border-slate-200/50 leading-relaxed">
+                            {item.mobileSummary}
+                          </p>
+                        )}
+
+                        {/* 시공 내용 요약 (PC 노출) */}
+                        <div className="hidden sm:block space-y-1.5 text-xs text-gray-600 bg-white p-3 rounded-lg border border-slate-200/50">
+                          <p><strong>진행 작업:</strong> {item.work}</p>
+                        </div>
+
+                        {/* 모바일 전용 접힘 세부정보 (<details> 활용으로 초기 HTML 포함) */}
+                        <details className="sm:hidden group mt-2 pt-2 border-t border-slate-200/50">
+                          <summary className="text-[11px] text-brand-accent font-bold cursor-pointer flex items-center justify-between list-none select-none py-1">
+                            <span>원인 점검 및 시공 세부내역</span>
+                            <svg className="w-3.5 h-3.5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </summary>
+                          <div className="mt-2 space-y-1.5 text-xs text-gray-600 bg-white p-2.5 rounded-lg border border-slate-200/50 leading-relaxed">
+                            <p><strong>확인 증상:</strong> {item.symptom}</p>
+                            <p><strong>점검 내용:</strong> {item.inspection}</p>
+                            <p><strong>진행 작업:</strong> {item.work}</p>
+                          </div>
+                        </details>
+                      </div>
+
+                      {/* 결과 마감 */}
+                      <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs sm:text-sm">
+                        <span className="text-gray-500 font-semibold">결과</span>
+                        <span className="font-bold text-brand-accent">{item.result}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* 4. 섹션 하단 공통 문의 CTA */}
+        <div className="mt-12 sm:mt-16 max-w-4xl mx-auto bg-slate-900 text-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center shadow-lg border border-slate-800">
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-extrabold mb-2.5 tracking-tight">
+            비슷한 증상이 확인되나요?
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 mb-6 max-w-xl mx-auto leading-relaxed">
+            누수 위치와 건물 외부 사진을 보내주시면 우선 확인해야 할 부위를 안내해드립니다.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto">
+            <a
+              href={siteConfig.phoneHref}
+              className="w-full sm:w-auto min-w-[180px] px-6 py-3.5 bg-brand-accent hover:bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-xs"
+            >
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <span>전화 상담 ({siteConfig.phoneNumber})</span>
+            </a>
+            <a
+              href={siteConfig.kakaoChannelUrl || siteConfig.phoneHref}
+              className="w-full sm:w-auto min-w-[180px] px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 text-xs sm:text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>사진 문의</span>
+            </a>
           </div>
         </div>
 

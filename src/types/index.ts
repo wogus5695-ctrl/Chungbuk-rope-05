@@ -126,5 +126,30 @@ export interface ImageSlots {
   finalCtaBackgroundImage: string | null;
   naverSearchThumbnailImage: string | null;
   openGraphThumbnailImage: string | null;
+  caseApartmentWindowCaulking: string | null;
+  caseFactoryExteriorCrackWaterproofing: string | null;
+  caseCommercialBuildingIntegratedWaterproofing: string | null;
+  caseVillaExteriorCoatingWaterproofing: string | null;
+  caseRooftopPlanterWaterproofing: string | null;
 }
+
+export interface WorkCase {
+  id: string;
+  imageKey: keyof ImageSlots | string;
+  buildingType: string;
+  categoryLabels: string[];
+  serviceTypes: string[];
+  relatedServiceTypes: string[];
+  title: string;
+  symptom: string;
+  inspection: string;
+  work: string;
+  result: string;
+  mobileSummary: string;
+  alt: string;
+  isVerified: boolean;
+  sortOrder: number;
+  isActive: boolean;
+}
+
 
