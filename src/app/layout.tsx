@@ -7,6 +7,30 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.cbrainguard.co.kr"),
   title: siteConfig.defaultTitle,
   description: siteConfig.defaultDescription,
+  openGraph: {
+    title: siteConfig.defaultTitle,
+    description: siteConfig.defaultDescription,
+    url: siteConfig.baseUrl,
+    siteName: siteConfig.branchName,
+    images: [
+      {
+        url: siteConfig.SEARCH_THUMBNAIL_URL,
+        secureUrl: siteConfig.SEARCH_THUMBNAIL_URL,
+        type: "image/webp",
+        width: siteConfig.SEARCH_THUMBNAIL_WIDTH,
+        height: siteConfig.SEARCH_THUMBNAIL_HEIGHT,
+        alt: siteConfig.SEARCH_THUMBNAIL_ALT,
+      }
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.defaultTitle,
+    description: siteConfig.defaultDescription,
+    images: [siteConfig.SEARCH_THUMBNAIL_URL],
+  },
   verification: {
     // 플레이스홀더 처리
     google: "GOOGLE_VERIFICATION_PLACEHOLDER",

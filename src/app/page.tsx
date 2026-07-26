@@ -30,6 +30,30 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
       description: siteConfig.defaultDescription,
       alternates: {
         canonical: siteConfig.baseUrl
+      },
+      openGraph: {
+        title: siteConfig.defaultTitle,
+        description: siteConfig.defaultDescription,
+        url: siteConfig.baseUrl,
+        siteName: siteConfig.branchName,
+        images: [
+          {
+            url: siteConfig.SEARCH_THUMBNAIL_URL,
+            secureUrl: siteConfig.SEARCH_THUMBNAIL_URL,
+            type: "image/webp",
+            width: siteConfig.SEARCH_THUMBNAIL_WIDTH,
+            height: siteConfig.SEARCH_THUMBNAIL_HEIGHT,
+            alt: siteConfig.SEARCH_THUMBNAIL_ALT,
+          }
+        ],
+        locale: "ko_KR",
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: siteConfig.defaultTitle,
+        description: siteConfig.defaultDescription,
+        images: [siteConfig.SEARCH_THUMBNAIL_URL],
       }
     };
   }
@@ -67,7 +91,31 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
     alternates: {
       canonical: canonicalUrl
     },
-    robots: "index, follow"
+    robots: "index, follow",
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      siteName: siteConfig.branchName,
+      images: [
+        {
+          url: siteConfig.SEARCH_THUMBNAIL_URL,
+          secureUrl: siteConfig.SEARCH_THUMBNAIL_URL,
+          type: "image/webp",
+          width: siteConfig.SEARCH_THUMBNAIL_WIDTH,
+          height: siteConfig.SEARCH_THUMBNAIL_HEIGHT,
+          alt: siteConfig.SEARCH_THUMBNAIL_ALT,
+        }
+      ],
+      locale: "ko_KR",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [siteConfig.SEARCH_THUMBNAIL_URL],
+    }
   };
 }
 

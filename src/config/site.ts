@@ -21,11 +21,11 @@ export const siteConfig: SiteConfig = {
   defaultDescription: "충청북도 전 지역 아파트/상가 창틀누수, 창틀코킹, 외벽누수 정밀 진단 및 시공 전문 레인가드입니다.",
   operatingRegion: "충청북도",
   ogImagePlaceholder: "/images/og-placeholder.png",
-  SEARCH_THUMBNAIL_PATH: "/images/seo/rainguard-search-thumbnail.jpg",
-  SEARCH_THUMBNAIL_URL: "https://www.cbrainguard.co.kr/images/seo/rainguard-search-thumbnail.jpg",
+  SEARCH_THUMBNAIL_PATH: "/images/seo/chungbuk-rainguard-search-thumbnail.webp",
+  SEARCH_THUMBNAIL_URL: "https://www.cbrainguard.co.kr/images/seo/chungbuk-rainguard-search-thumbnail.webp",
   SEARCH_THUMBNAIL_WIDTH: 1200,
-  SEARCH_THUMBNAIL_HEIGHT: 630,
-  SEARCH_THUMBNAIL_ALT: "충청북도 창틀코킹 및 빗물누수 전문 레인가드",
+  SEARCH_THUMBNAIL_HEIGHT: 1200,
+  SEARCH_THUMBNAIL_ALT: "충북 빗물누수 창틀누수 전문업체 레인가드",
   MAIN_HERO_IMAGE: "/images/hero/rainguard-chungbuk-hero-v1.jpg",
   baseUrl: "https://www.cbrainguard.co.kr"
 };

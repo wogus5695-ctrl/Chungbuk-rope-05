@@ -243,6 +243,24 @@ export default function Footer({ region, service }: FooterProps) {
           </div>
         )}
 
+        {/* 네이버/구글 검색로봇 문서 대표 이미지 수집 보조 1회 배치 */}
+        <div className="mt-6 pt-4 border-t border-gray-800/60 flex flex-col items-start gap-2">
+          <span className="text-[11px] text-gray-500 font-semibold tracking-wider">
+            충북 레인가드 검색 대표 썸네일
+          </span>
+          <div className="w-full max-w-[180px] sm:max-w-[220px] rounded-lg overflow-hidden border border-gray-800 bg-gray-900/60 p-1">
+            <img
+              src={siteConfig.SEARCH_THUMBNAIL_PATH}
+              width={siteConfig.SEARCH_THUMBNAIL_WIDTH}
+              height={siteConfig.SEARCH_THUMBNAIL_HEIGHT}
+              alt={siteConfig.SEARCH_THUMBNAIL_ALT}
+              loading="eager"
+              decoding="async"
+              className="w-full h-auto object-contain block rounded"
+            />
+          </div>
+        </div>
+
         {/* 구분선 */}
         <div className="border-t border-gray-800 my-6"></div>
 
