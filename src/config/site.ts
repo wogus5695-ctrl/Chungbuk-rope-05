@@ -2,18 +2,18 @@ import { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
   brandName: "레인가드",
-  branchName: "레인가드 충청북도 지점",
+  branchName: "레인가드 충북지점",
   
-  // 연락처 정보 (미확정 상태로 빈 문자열 처리)
-  phoneNumber: "", // 예: "010-XXXX-XXXX"
-  phoneHref: "", // 예: "tel:010XXXXXXXX"
-  kakaoChannelUrl: "", // 예: "http://pf.kakao.com/_xxxxxx"
+  // 연락처 정보
+  phoneNumber: "010-4667-5568",
+  phoneHref: "tel:010-4667-5568",
+  kakaoChannelUrl: "",
   
-  // 사업자 정보 (미확정 상태로 빈 문자열 처리)
-  businessName: "", // 예: "(주)레인가드충북"
-  representativeName: "", // 예: "홍길동"
-  businessRegistrationNumber: "", // 예: "000-00-00000"
-  address: "", // 예: "충청북도 청주시 상당구 ..."
+  // 사업자 정보
+  businessName: "올케어서비스",
+  representativeName: "김재현",
+  businessRegistrationNumber: "405-15-02677",
+  address: "",
   privacyPolicyUrl: "/privacy",
   copyrightText: "© 레인가드 충청북도 지점. All rights reserved.",
 
@@ -27,5 +27,5 @@ export const siteConfig: SiteConfig = {
   SEARCH_THUMBNAIL_HEIGHT: 630,
   SEARCH_THUMBNAIL_ALT: "충청북도 창틀코킹 및 빗물누수 전문 레인가드",
   MAIN_HERO_IMAGE: "/images/hero/rainguard-chungbuk-hero-v1.jpg",
-  baseUrl: "https://chungbuk-rope-05.vercel.app"
+  baseUrl: "https://www.cbrainguard.co.kr"
 };

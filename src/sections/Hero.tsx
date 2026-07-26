@@ -13,16 +13,25 @@ interface HeroProps {
 export default function Hero({ region, service }: HeroProps) {
   const isDynamic = !!region && !!service;
 
-  // 1. 이미지 슬롯 독립 매핑 (메인 vs 동적, PC vs MO 분리)
+  // 1. 이미지 슬롯 독립 매핑
   const desktopBg = isDynamic ? imageSlots.dynamicHeroBackgroundDesktop : imageSlots.mainHeroBackgroundDesktop;
   const mobileBg = isDynamic ? imageSlots.dynamicHeroBackgroundMobile : imageSlots.mainHeroBackgroundMobile;
 
+  const isOfficialCity = isDynamic && region.regionType === "city" && region.keywordName.endsWith("시");
+  const isAbbrevCity = isDynamic && region.regionType === "city" && !region.keywordName.endsWith("시");
+
   // 2. 동적 텍스트 분기 처리
   const getSubTitle = () => {
-    if (isDynamic) {
-      return `${region.keywordName} ${service.keyword} 상담`;
+    if (!isDynamic) {
+      return "충북 창틀·누수·방수 현장 상담";
     }
-    return "충북 창틀·누수·방수 현장 상담";
+    if (isOfficialCity) {
+      return `${region.keywordName} 행정구역 전역 점검`;
+    }
+    if (isAbbrevCity) {
+      return `${region.keywordName} 현장 증상 빠른 상담`;
+    }
+    return `${region.keywordName} ${service.keyword} 상담`;
   };
 
   const getH1Title = () => {
@@ -65,6 +74,14 @@ export default function Hero({ region, service }: HeroProps) {
   const getDescription = () => {
     if (!isDynamic) {
       return "창틀 실리콘과 외벽 균열, 방수층 상태를 함께 확인해 필요한 보수 범위를 안내합니다.";
+    }
+
+    if (isOfficialCity) {
+      return `${region.formalName} 전체 행정구역을 대상으로 ${service.keyword} 취약 부위를 정밀 진단하고 규격 보수 범위를 안내합니다.`;
+    }
+
+    if (isAbbrevCity) {
+      return `${region.keywordName} 지역 건물 ${service.keyword} 누수 증상을 확인하고, 현장 사진을 통한 실시간 보수 상담을 제공합니다.`;
     }
 
     const kw = service.keyword;
@@ -121,12 +138,12 @@ export default function Hero({ region, service }: HeroProps) {
           className="absolute inset-0 block md:hidden bg-cover pointer-events-none opacity-80 z-0" 
           style={{ 
             backgroundImage: `url(${mobileBg})`,
-            backgroundPosition: "left 10% center" // 모바일화면 작업자 및 구도 최적화
+            backgroundPosition: "left 10% center"
           }}
         />
       )}
 
-      {/* 모바일/PC 어두운 오버레이 레이어 (모바일 텍스트 가독성 최우선 확보 수평/수직 그라데이션) */}
+      {/* 모바일/PC 오버레이 */}
       <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/40 md:from-slate-950/80 md:via-slate-950/50 md:to-transparent z-10" />
       <div className="absolute inset-0 block md:hidden bg-gradient-to-b from-slate-950/50 via-transparent to-slate-950/80 z-10" />
 
@@ -140,12 +157,12 @@ export default function Hero({ region, service }: HeroProps) {
             {getSubTitle()}
           </span>
           
-          {/* H1 메인 타이틀 (단일 H1 요소로 반응형 타이포그래피 구현) */}
+          {/* H1 메인 타이틀 */}
           <h1 className="text-[31px] xs:text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-[800] text-white leading-[1.14] sm:leading-[1.16] tracking-[-0.035em] mb-4 select-none break-keep">
             {getH1Title()}
           </h1>
           
-          {/* 설명글 (PC 1.55 / MO 1.5, 간결한 비추상적 문구) */}
+          {/* 설명글 */}
           <p className="text-[15px] sm:text-[16px] text-gray-200 leading-[1.5] sm:leading-[1.6] tracking-[-0.015em] max-w-lg mb-6 sm:mb-8 line-clamp-3 font-normal">
             {getDescription()}
           </p>

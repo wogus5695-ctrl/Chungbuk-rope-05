@@ -29,8 +29,17 @@ export default function Footer({ region, service }: FooterProps) {
   const serviceName = service?.keyword || "빗물누수";
   const isDynamic = !!region && !!service;
 
+  const isOfficialCity = isDynamic && region.regionType === "city" && region.keywordName.endsWith("시");
+  const isAbbrevCity = isDynamic && region.regionType === "city" && !region.keywordName.endsWith("시");
+
   // 11단계: 최종 CTA 문구 및 배경 이미지 슬롯 단독 연동
   const getCtaTitle = () => {
+    if (isOfficialCity) {
+      return `${regionName} 전체 행정구역 ${serviceName}, 수분 유입 부위가 고민되신다면 전문 시공팀의 현장 조사를 신청해 보세요.`;
+    }
+    if (isAbbrevCity) {
+      return `${regionName} ${serviceName} 누수 증상이 반복된다면, 증상 사진을 보내주시면 빠르게 가견적을 진단해 드립니다.`;
+    }
     if (isDynamic) {
       return `${regionName} ${serviceName}, 증상이 반복된다면 유입 가능 부위를 먼저 확인하세요.`;
     }
@@ -39,15 +48,13 @@ export default function Footer({ region, service }: FooterProps) {
 
   const finalCtaBg = imageSlots.finalCtaBackgroundImage;
 
-  // 관련 내부 링크 동적 생성 (6~10개 제한)
+  // 관련 내부 링크 동적 생성 (정식시 vs 축약시 의도별 차별화)
   const renderRegionLinks = () => {
-    // 공통 URL 생성 헬퍼
     const getUrl = (regionKeyword: string, serviceKeyword: string) => {
       return `/?k=${encodeURIComponent(`${regionKeyword}-${serviceKeyword}`)}`;
     };
 
     if (!isDynamic) {
-      // 메인 페이지일 때: 최상위 시/군 정식 명칭 10개 출력 (청주시, 충주시, 제천시, 대전시, 세종시 및 대표 군)
       const primaryRegions = regionsData
         .filter(r => r.parentId === null && (r.keywordName.endsWith("시") || r.keywordName.endsWith("군")))
         .slice(0, 10);
@@ -71,66 +78,86 @@ export default function Footer({ region, service }: FooterProps) {
     }
 
     const links: React.ReactNode[] = [];
-    
-    // 1. 같은 상위 구/시/군 아래에 속하며 동일한 regionType(동은 동끼리, 읍면은 읍면끼리)을 가진 실제 인접 형제 지역 링크 (최대 5개)
-    const sameTypeSiblings = regionsData
-      .filter(r => r.parentId === region.parentId && r.id !== region.id && r.regionType === region.regionType && r.isActive)
-      .slice(0, 5);
 
-    sameTypeSiblings.forEach((sib) => {
-      links.push(
-        <a 
-          key={`sib-${sib.id}`}
-          href={getUrl(sib.keywordName, serviceName)}
-          className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
-        >
-          {sib.displayName} {serviceName}
-        </a>
-      );
-    });
+    if (isOfficialCity) {
+      // 정식시 (청주시, 대전시 등): 하위 구/동 관련 행정구역 링크 우선 출력
+      const childDistricts = regionsData
+        .filter(r => r.parentId === region.id || (region.id === "cheongju-si" && r.parentId === "cheongju-si") || (region.id === "daejeon-si" && r.parentId === "daejeon-si"))
+        .slice(0, 8);
 
-    // 2. 만약 동일 유형 형제 지역이 부족하다면, 같은 부모의 다른 유형 지역 링크 보충
-    if (links.length < 5) {
-      const otherTypeSiblings = regionsData
-        .filter(r => r.parentId === region.parentId && r.id !== region.id && r.regionType !== region.regionType && r.isActive)
-        .slice(0, 5 - links.length);
-
-      otherTypeSiblings.forEach((ots) => {
+      childDistricts.forEach((dist) => {
         links.push(
           <a 
-            key={`ots-${ots.id}`}
-            href={getUrl(ots.keywordName, serviceName)}
+            key={`dist-${dist.id}`}
+            href={getUrl(dist.keywordName, serviceName)}
             className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
           >
-            {ots.displayName} {serviceName}
+            {dist.displayName} {serviceName}
+          </a>
+        );
+      });
+    } else if (isAbbrevCity) {
+      // 축약시 (청주, 대전 등): 동일 지역의 관련 작업 서비스 추천 링크 우선 출력
+      const otherServices = servicesData
+        .filter(s => s.keyword !== serviceName)
+        .slice(0, 8);
+
+      otherServices.forEach((s) => {
+        links.push(
+          <a 
+            key={`svc-${s.keyword}`}
+            href={getUrl(region.keywordName, s.keyword)}
+            className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
+          >
+            {region.displayName} {s.keyword}
+          </a>
+        );
+      });
+    } else {
+      // 일반 동/읍/면: 동일 상위 구/군의 인접 형제 지역 링크
+      const sameTypeSiblings = regionsData
+        .filter(r => r.parentId === region.parentId && r.id !== region.id && r.isActive)
+        .slice(0, 5);
+
+      sameTypeSiblings.forEach((sib) => {
+        links.push(
+          <a 
+            key={`sib-${sib.id}`}
+            href={getUrl(sib.keywordName, serviceName)}
+            className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
+          >
+            {sib.displayName} {serviceName}
+          </a>
+        );
+      });
+
+      const otherServices = servicesData
+        .filter(s => s.keyword !== serviceName)
+        .slice(0, 4);
+
+      otherServices.forEach((s) => {
+        links.push(
+          <a 
+            key={`svc-${s.keyword}`}
+            href={getUrl(region.keywordName, s.keyword)}
+            className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
+          >
+            {region.displayName} {s.keyword}
           </a>
         );
       });
     }
 
-    // 3. 같은 지역(displayName)의 다른 추천 작업명 연동 링크 (4개)
-    const otherServices = servicesData
-      .filter(s => s.keyword !== serviceName)
-      .slice(0, 4);
-
-    otherServices.forEach((s) => {
-      links.push(
-        <a 
-          key={`svc-${s.keyword}`}
-          href={getUrl(region.keywordName, s.keyword)}
-          className="bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-gray-800/80 transition-colors"
-        >
-          {region.displayName} {s.keyword}
-        </a>
-      );
-    });
-
-    // 최종 6~10개 범위로 엄격 제한 컷오프
     const finalLinks = links.slice(0, 10);
+    const linkSectionHeading = isOfficialCity
+      ? `${regionName} 행정구역 세부 관할 지역 네트워크`
+      : isAbbrevCity
+      ? `${regionName} 추천 시공 서비스 네트워크`
+      : `${regionName} 시공 지원 및 추천 네트워크`;
 
     return (
       <div className="mt-8 border-t border-gray-800/60 pt-6">
-        <span className="text-xs text-gray-500 font-semibold block mb-3">{regionName} 시공 지원 및 추천 네트워크</span>
+        <span className="text-xs text-gray-500 font-semibold block mb-3">{linkSectionHeading}</span>
         <div className="flex flex-wrap gap-2 text-xs">
           {finalLinks}
         </div>
@@ -139,13 +166,11 @@ export default function Footer({ region, service }: FooterProps) {
   };
 
   return (
-    <footer id="footer" className="bg-brand-primary text-gray-400 py-10 sm:py-14 border-t border-gray-800">
+    <footer id="footer" className="bg-brand-primary text-gray-400 pt-10 sm:pt-14 pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:pb-14 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4">
         
-        {/* 11단계: 최종 CTA 영역 (배경 이미지 단독 연동, 없을 시 명품 그라데이션) */}
-        <div 
-          className="relative bg-gray-950 p-6 sm:p-10 rounded-2xl border border-gray-800/80 mb-10 overflow-hidden"
-        >
+        {/* 11단계: 최종 CTA 영역 */}
+        <div className="relative bg-gray-950 p-6 sm:p-10 rounded-2xl border border-gray-800/80 mb-10 overflow-hidden">
           {finalCtaBg && (
             <div 
               className="absolute inset-0 bg-cover bg-center opacity-30 pointer-events-none z-0" 
@@ -183,7 +208,7 @@ export default function Footer({ region, service }: FooterProps) {
           </div>
         </div>
 
-        {/* 상단 레이아웃 (정보 요약) */}
+        {/* 정보 요약 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
           <div>
             <div className="text-white font-bold text-base mb-3">{branchName}</div>
@@ -206,12 +231,12 @@ export default function Footer({ region, service }: FooterProps) {
         {/* 10단계: 동적 내부 링크 구조 렌더링 */}
         {renderRegionLinks()}
 
-        {/* 사업자 정보 노출 영역 (공개 화면에서 undefined/null 방지) */}
+        {/* 사업자 정보 노출 영역 */}
         {(businessName || representativeName || businessRegistrationNumber || address) && (
-          <div className="text-[11px] sm:text-xs text-gray-500 space-y-1 mt-8 mb-6 border-t border-gray-800/60 pt-6">
-            <div className="flex flex-wrap gap-x-4 gap-y-1">
-              {businessName && <span>상호 : {businessName}</span>}
-              {representativeName && <span>대표 : {representativeName}</span>}
+          <div className="text-[11px] sm:text-xs text-gray-400 space-y-1 mt-8 mb-6 border-t border-gray-800/60 pt-6">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 font-medium">
+              {businessName && <span>상호명 : {businessName}</span>}
+              {representativeName && <span>대표자명 : {representativeName}</span>}
               {businessRegistrationNumber && <span>사업자등록번호 : {businessRegistrationNumber}</span>}
             </div>
             {address && <p>주소 : {address}</p>}

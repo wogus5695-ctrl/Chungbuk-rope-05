@@ -12,12 +12,13 @@ import WorkProcess from "@/sections/WorkProcess";
 import FAQ from "@/sections/FAQ";
 import Footer from "@/sections/Footer";
 import InteractiveCTA from "@/components/InteractiveCTA";
+import JsonLd from "@/components/JsonLd";
 
 interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-// 7단계: 동적 SEO 메타데이터 생성 엔진
+// 7단계: 동적 SEO 메타데이터 생성 엔진 (정식시 vs 축약시 결정적 분기)
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
   const resolvedSearchParams = await searchParams;
   const k = typeof resolvedSearchParams.k === "string" ? resolvedSearchParams.k : undefined;
@@ -42,23 +43,21 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
   }
 
   const { region, service } = parsed;
-  const isCheongjuSi = region.id === "cheongju-si";
-  const isCheongju = region.id === "cheongju";
+  const isOfficialCity = region.regionType === "city" && region.keywordName.endsWith("시");
+  const isAbbrevCity = region.regionType === "city" && !region.keywordName.endsWith("시");
 
-  // 청주시 vs 청주 타이틀 분기 및 전용 템플릿 처리
   let title = `${region.keywordName} ${service.keyword} | 창틀·외벽 유입 경로 점검 레인가드`;
-  if (isCheongju) {
-    title = `${region.keywordName} ${service.keyword} | 비 올 때 반복되는 누수 점검 레인가드`;
+  let description = `${region.formalName} ${service.keyword} 전문. 꼼꼼한 원인 진단과 친환경 자재 사용으로 정밀 방수 보수.`;
+
+  if (isOfficialCity) {
+    title = `${region.keywordName} ${service.keyword} 전체 행정구역 정밀 진단 및 방수 보수 | 레인가드`;
+    description = `${region.formalName} 전역 행정구역 대상 ${service.keyword} 정밀 점검 및 시공. 건물 외벽·옥상·창호 취약 부위 원인 분석 및 규격 공사.`;
+  } else if (isAbbrevCity) {
+    title = `${region.keywordName} ${service.keyword} 누수 증상 상담 및 정밀 보수 | 레인가드`;
+    description = `${region.keywordName} 건물 ${service.keyword} 누수 증상 신속 상담. 현장 사진 진단 및 보수 범위 실시간 안내.`;
   } else if (region.regionType === "eup") {
     title = `${region.keywordName} ${service.keyword} | 판넬 이음부·체결부 점검 레인가드`;
   }
-
-  // description 커스텀 생성
-  const description = isCheongjuSi 
-    ? `${region.formalName} 전체 지역 대상 ${service.keyword} 신속 대응. 상당구, 서원구, 흥덕구, 청원구 밀착 시공 및 품질 보증.`
-    : isCheongju 
-    ? `${region.keywordName} 시민들이 추천하는 ${service.keyword} 재누수 차단 정밀 코킹 및 방수 시공 견적 상담.`
-    : `${region.formalName} ${service.keyword} 전문. 꼼꼼한 원인 진단과 친환경 자재 사용으로 완벽 방수 보장.`;
 
   const canonicalUrl = `${siteConfig.baseUrl}/?k=${encodeURIComponent(k)}`;
 
@@ -80,6 +79,7 @@ export default async function Home({ searchParams }: PageProps) {
   if (!k) {
     return (
       <div className="min-h-screen flex flex-col pb-16 md:pb-0">
+        <JsonLd />
         <Header />
         <main className="flex-grow">
           <Hero />
@@ -98,15 +98,17 @@ export default async function Home({ searchParams }: PageProps) {
   // 2. k 파라미터가 존재하는 경우: 동적 키워드 파싱 시작
   const parsed = parseKeyword(k);
 
-  // 3. 파싱에 실패하거나 유효하지 않은 지역/작업일 경우: 실제 HTTP 404 응답 호출
+  // 3. 파싱 실패 시: 404 페이지 렌더링
   if (!parsed) {
     notFound();
   }
 
+  // 4. 파싱 성공 시: 검증된 region, service 데이터를 하위 UI 컴포넌트로 전달
   const { region, service } = parsed;
 
   return (
     <div className="min-h-screen flex flex-col pb-16 md:pb-0">
+      <JsonLd region={region} service={service} />
       <Header />
       <main className="flex-grow">
         <Hero region={region} service={service} />

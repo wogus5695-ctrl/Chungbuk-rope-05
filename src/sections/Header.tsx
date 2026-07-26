@@ -29,7 +29,7 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* PC: 최소 네비게이션 및 우측 문의 버튼 그룹 */}
+        {/* PC: 네비게이션 및 우측 문의 버튼 그룹 */}
         <div className="hidden md:flex items-center gap-8">
           <nav className="flex space-x-6 text-[13px] font-semibold text-gray-600">
             <a href="#symptoms" className="hover:text-brand-accent transition-colors">누수증상</a>
@@ -62,12 +62,15 @@ export default function Header() {
           </div>
         </div>
 
-        {/* MO: 메뉴 토글 햄버거 버튼 */}
+        {/* MO: 접근성 보완 메뉴 토글 버튼 */}
         <div className="flex md:hidden items-center">
           <button 
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 text-brand-primary active:bg-gray-50 rounded-lg focus:outline-hidden transition-colors"
-            aria-label="메뉴 토글"
+            className="p-2 text-brand-primary active:bg-gray-50 rounded-lg focus:outline-hidden transition-colors cursor-pointer"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            aria-label={isOpen ? "메뉴 닫기" : "메뉴 열기"}
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               {isOpen ? (
@@ -83,7 +86,7 @@ export default function Header() {
 
       {/* MO: 드롭다운 모바일 메뉴 */}
       {isOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white shadow-inner animate-fadeIn">
+        <div id="mobile-menu" className="md:hidden border-t border-gray-100 bg-white shadow-inner animate-fadeIn">
           <nav className="flex flex-col py-3 px-4 space-y-3.5 text-sm font-bold text-gray-700">
             <a href="#symptoms" onClick={() => setIsOpen(false)} className="hover:text-brand-accent py-1">누수증상</a>
             <a href="#path" onClick={() => setIsOpen(false)} className="hover:text-brand-accent py-1">누수경로</a>

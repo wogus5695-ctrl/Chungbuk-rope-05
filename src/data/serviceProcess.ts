@@ -190,7 +190,7 @@ export const serviceProcessMap: Record<string, ServiceProcess> = {
         icon: "shield-check",
         title: "방수 마감과 취약부 확인",
         description: "보수 부위를 마감한 뒤 주변 접합부와 추가 취약 부위를 함께 확인합니다.",
-        highlights: ["보수 부위 완벽 방수 마감", "주변 접합부 추가 점검"]
+        highlights: ["보수 부위 기밀 방수 마감", "주변 접합부 추가 점검"]
       }
     ],
     notice: "건물 상태와 손상 범위에 따라 실제 작업 순서와 사용 자재는 달라질 수 있습니다."
