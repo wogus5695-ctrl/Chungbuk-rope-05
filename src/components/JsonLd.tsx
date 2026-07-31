@@ -6,9 +6,10 @@ import { getServiceFaqData } from "@/data/serviceFaq";
 interface JsonLdProps {
   region?: DetailedRegion;
   service?: ServiceData;
+  rawK?: string;
 }
 
-export default function JsonLd({ region, service }: JsonLdProps) {
+export default function JsonLd({ region, service, rawK }: JsonLdProps) {
   const baseUrl = siteConfig.baseUrl || "https://www.cbrainguard.co.kr";
   const serviceKeyword = service?.keyword || "빗물누수";
 
@@ -36,27 +37,26 @@ export default function JsonLd({ region, service }: JsonLdProps) {
   }
 
   // 3. BreadcrumbList Schema (유효한 200 URL만 사용)
-  const itemListElement = [
+  const itemListElement: any[] = [
     {
       "@type": "ListItem",
       "position": 1,
-      "name": "레인가드 메인",
-      "item": baseUrl
+      "item": {
+        "@id": `${baseUrl}/`,
+        "name": "레인가드"
+      }
     }
   ];
 
-  if (region && service) {
+  if (region && service && rawK) {
+    const decodedK = decodeURIComponent(rawK).trim();
     itemListElement.push({
       "@type": "ListItem",
       "position": 2,
-      "name": "충북 허브",
-      "item": `${baseUrl}/sitemap-chungbuk`
-    });
-    itemListElement.push({
-      "@type": "ListItem",
-      "position": 3,
-      "name": `${region.displayName} ${service.keyword}`,
-      "item": `${baseUrl}/?k=${encodeURIComponent(`${region.keywordName}-${service.keyword}`)}`
+      "item": {
+        "@id": `${baseUrl}/?k=${encodeURIComponent(rawK)}`,
+        "name": decodedK
+      }
     });
   }
 

@@ -66,22 +66,9 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
     };
   }
 
-  const { region, service } = parsed;
-  const isOfficialCity = region.regionType === "city" && region.keywordName.endsWith("시");
-  const isAbbrevCity = region.regionType === "city" && !region.keywordName.endsWith("시");
-
-  let title = `${region.keywordName} ${service.keyword} | 창틀·외벽 유입 경로 점검 레인가드`;
-  let description = `${region.formalName} ${service.keyword} 전문. 꼼꼼한 원인 진단과 친환경 자재 사용으로 정밀 방수 보수.`;
-
-  if (isOfficialCity) {
-    title = `${region.keywordName} ${service.keyword} 전체 행정구역 정밀 진단 및 방수 보수 | 레인가드`;
-    description = `${region.formalName} 전역 행정구역 대상 ${service.keyword} 정밀 점검 및 시공. 건물 외벽·옥상·창호 취약 부위 원인 분석 및 규격 공사.`;
-  } else if (isAbbrevCity) {
-    title = `${region.keywordName} ${service.keyword} 누수 증상 상담 및 정밀 보수 | 레인가드`;
-    description = `${region.keywordName} 건물 ${service.keyword} 누수 증상 신속 상담. 현장 사진 진단 및 보수 범위 실시간 안내.`;
-  } else if (region.regionType === "eup") {
-    title = `${region.keywordName} ${service.keyword} | 판넬 이음부·체결부 점검 레인가드`;
-  }
+  const rawDecodedK = decodeURIComponent(k).trim();
+  const title = `${rawDecodedK} 전문 시공 | 10년 경력 레인가드`;
+  const description = `${parsed.region.formalName} ${parsed.service.keyword} 전문. 꼼꼼한 원인 진단과 친환경 자재 사용으로 정밀 방수 보수.`;
 
   const canonicalUrl = `${siteConfig.baseUrl}/?k=${encodeURIComponent(k)}`;
 
@@ -156,7 +143,7 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col pb-16 md:pb-0">
-      <JsonLd region={region} service={service} />
+      <JsonLd region={region} service={service} rawK={k} />
       <Header />
       <main className="flex-grow">
         <Hero region={region} service={service} />
