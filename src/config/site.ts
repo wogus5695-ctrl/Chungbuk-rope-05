@@ -5,9 +5,9 @@ export const siteConfig: SiteConfig = {
   branchName: "레인가드 충북지점",
   
   // 연락처 정보
-  phoneNumber: "010-4667-5568",
-  phoneHref: "tel:010-4667-5568",
-  kakaoChannelUrl: "",
+  phoneNumber: "050-7871-3550",
+  phoneHref: "tel:050-7871-3550",
+  kakaoChannelUrl: "http://pf.kakao.com/_xfghfX",
   
   // 사업자 정보
   businessName: "올케어서비스",
