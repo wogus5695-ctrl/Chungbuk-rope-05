@@ -200,7 +200,7 @@ export default function Footer({ region, service }: FooterProps) {
               <ContactButton 
                 type="kakao" 
                 variant="secondary" 
-                className="inline-flex items-center justify-center px-6 h-12 bg-white hover:bg-gray-50 text-gray-800 text-[14px] font-bold rounded-lg transition-colors cursor-pointer w-full sm:w-auto shadow-sm"
+                className="inline-flex items-center justify-center px-6 h-12 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] text-[14px] font-bold rounded-lg transition-colors cursor-pointer w-full sm:w-auto shadow-sm"
               >
                 카카오톡으로 사진 보내기
               </ContactButton>

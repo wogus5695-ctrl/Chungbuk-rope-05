@@ -97,9 +97,9 @@ export default function LeakSymptoms({ region, service }: LeakSymptomsProps) {
             type="kakao" 
             variant="secondary"
             aria-label="카카오톡으로 현장 사진 문의하기"
-            className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-yellow-50 hover:bg-yellow-100/80 text-yellow-900 text-[14px] sm:text-[15px] font-bold rounded-lg border border-yellow-200 transition-colors shadow-xs"
+            className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] text-[14px] sm:text-[15px] font-bold rounded-lg transition-colors shadow-xs"
           >
-            <svg className="w-5 h-5 text-yellow-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-[#191919] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 3c-4.97 0-9 3.185-9 7.11 0 2.51 1.66 4.723 4.18 5.922-.165.617-.6 2.25-.688 2.587-.13.51.173.5.364.372.15-.1.2.148 2.822-1.92.73.204 1.514.32 2.322.32 4.97 0 9-3.185 9-7.11S16.97 3 12 3z" />
             </svg>
             <span className="block sm:hidden">사진으로 문의하기</span>

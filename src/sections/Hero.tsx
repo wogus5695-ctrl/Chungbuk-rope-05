@@ -183,7 +183,7 @@ export default function Hero({ region, service }: HeroProps) {
               type="kakao" 
               variant="secondary" 
               aria-label="카카오톡으로 현장 사진 문의하기"
-              className="inline-flex items-center justify-center px-4 sm:px-6 h-[50px] sm:h-[52px] bg-white hover:bg-gray-50 text-slate-900 text-[15px] sm:text-[16px] font-bold border border-slate-200 rounded-lg transition-colors cursor-pointer flex-1 sm:flex-initial shadow-sm whitespace-nowrap"
+              className="inline-flex items-center justify-center px-4 sm:px-6 h-[50px] sm:h-[52px] bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] text-[15px] sm:text-[16px] font-bold rounded-lg transition-colors cursor-pointer flex-1 sm:flex-initial shadow-sm whitespace-nowrap"
             >
               <span className="block sm:hidden">사진 문의</span>
               <span className="hidden sm:block">카카오톡으로 사진 보내기</span>

@@ -39,13 +39,25 @@ export default function ContactButton({
   let baseStyle = className;
   if (!className) {
     if (variant === "primary") {
-      baseStyle = "inline-flex items-center justify-center px-6 h-11 bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-semibold rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-accent";
+      if (type === "kakao") {
+        baseStyle = "inline-flex items-center justify-center px-6 h-11 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] text-sm font-bold rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#FEE500]";
+      } else {
+        baseStyle = "inline-flex items-center justify-center px-6 h-11 bg-brand-accent hover:bg-brand-accent-hover text-white text-sm font-semibold rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-accent";
+      }
     } else if (variant === "secondary") {
-      baseStyle = "inline-flex items-center justify-center px-6 h-11 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold border border-gray-200 rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-accent";
+      if (type === "kakao") {
+        baseStyle = "inline-flex items-center justify-center px-6 h-11 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] text-sm font-bold border border-[#FEE500] rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#FEE500]";
+      } else {
+        baseStyle = "inline-flex items-center justify-center px-6 h-11 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold border border-gray-200 rounded-lg transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-accent";
+      }
     } else if (variant === "floating") {
       baseStyle = "flex flex-col items-center justify-center flex-1 h-full cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-accent";
     } else if (variant === "text") {
-      baseStyle = "hover:text-brand-accent transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-accent";
+      if (type === "kakao") {
+        baseStyle = "hover:text-yellow-600 transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-500";
+      } else {
+        baseStyle = "hover:text-brand-accent transition-colors cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-accent";
+      }
     }
   }
 
