@@ -40,19 +40,19 @@ export default function LeakSymptoms({ region, service }: LeakSymptomsProps) {
         
         {/* 섹션 헤더 (H2 단일 노출) */}
         <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
-          <h2 className="text-[25px] xs:text-[27px] sm:text-[32px] md:text-[36px] font-[800] text-brand-primary tracking-tight leading-[1.25] mb-2 sm:mb-3">
+          <h2 className="text-[24px] xs:text-[26px] sm:text-[32px] md:text-[36px] font-[800] text-brand-primary tracking-tight leading-[1.28] mb-3 sm:mb-3.5 break-keep">
             {sectionTitle}
           </h2>
-          <p className="text-[15px] sm:text-[16px] text-gray-600 leading-[1.5] max-w-md mx-auto">
+          <p className="text-[14px] sm:text-[16px] text-gray-600 leading-[1.6] max-w-md mx-auto break-keep">
             {sectionDescription}
           </p>
         </div>
 
         {/* 메인 레이아웃: 이미지 좌측(5) + 증상 카드 2x2 우측(7) / MO 1열 구조 */}
-        <div className={`grid grid-cols-1 ${mainImage ? "lg:grid-cols-12 gap-6 lg:gap-8" : "max-w-4xl mx-auto"} items-center mb-8 sm:mb-10`}>
+        <div className={`grid grid-cols-1 ${mainImage ? "lg:grid-cols-12 gap-6 lg:gap-8" : "max-w-4xl mx-auto"} items-center mb-7 sm:mb-10`}>
           
           {mainImage && (
-            <div className="lg:col-span-5 w-full mb-6 lg:mb-0">
+            <div className="lg:col-span-5 w-full mb-5 lg:mb-0">
               <SafeImage 
                 src={mainImage} 
                 alt={altText} 
@@ -64,24 +64,24 @@ export default function LeakSymptoms({ region, service }: LeakSymptomsProps) {
 
           <div className={`${mainImage ? "lg:col-span-7" : "w-full"}`}>
             {/* 카드 리스트: MO 1열 (gap 14~16px), PC 2x2 (gap 16~20px) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4.5">
               {diagnosisData.symptoms.map((item, idx) => (
                 <div 
                   key={idx} 
-                  className="p-5 sm:p-6 border border-slate-200/90 rounded-xl bg-slate-50/70 flex flex-col justify-start transition-shadow hover:shadow-sm"
+                  className="p-4.5 sm:p-6 border border-slate-200/90 rounded-xl bg-slate-50/70 flex flex-col justify-start transition-shadow hover:shadow-sm"
                 >
                   {/* 1. 증상 라벨 */}
-                  <span className="text-[14px] font-[800] text-brand-accent mb-1.5 uppercase tracking-wider">
+                  <span className="text-[13px] sm:text-[14px] font-[800] text-brand-accent mb-1.5 uppercase tracking-wider">
                     {item.label}
                   </span>
 
                   {/* 2. 짧은 증상 제목 H3 */}
-                  <h3 className="font-[800] text-[18px] sm:text-[19px] lg:text-[20px] text-brand-primary mb-2 leading-[1.38] tracking-tight">
+                  <h3 className="font-[800] text-[17px] sm:text-[19px] lg:text-[20px] text-brand-primary mb-2 leading-[1.38] tracking-tight break-keep">
                     {item.title}
                   </h3>
 
                   {/* 3. 원인/상태 설명 한 문장 */}
-                  <p className="text-[14px] sm:text-[15px] text-gray-600 leading-[1.5] line-clamp-2 font-normal">
+                  <p className="text-[13.5px] sm:text-[15px] text-gray-600 leading-[1.55] font-normal break-keep">
                     {item.description}
                   </p>
                 </div>

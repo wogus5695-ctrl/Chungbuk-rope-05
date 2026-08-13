@@ -55,24 +55,24 @@ export default function LeakPath({ region, service }: LeakPathProps) {
       <div className="max-w-7xl mx-auto px-4">
         
         {/* 섹션 헤더 (H2) */}
-        <div className="text-center max-w-xl mx-auto mb-10 sm:mb-14">
-          <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight">
+        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-14">
+          <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight mb-2.5 sm:mb-3 break-keep">
             {sectionTitle}
           </h2>
-          <p className="mt-2 text-xs xs:text-sm text-gray-500 leading-relaxed">
+          <p className="text-xs xs:text-sm text-gray-500 leading-relaxed break-keep">
             {sectionDescription}
           </p>
         </div>
 
         {/* 메인 분석 콘텐츠 레이아웃 */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 mb-8 sm:mb-10">
           
           {/* 좌측: 점검 및 작업 범위 텍스트 블록 (항상 노출) */}
-          <div className={`col-span-1 ${imgInspection || imgMethod ? "lg:col-span-7" : "lg:col-span-12"} space-y-6`}>
+          <div className={`col-span-1 ${imgInspection || imgMethod ? "lg:col-span-7" : "lg:col-span-12"} space-y-4 sm:space-y-6`}>
             
             {/* 점검 대상 */}
-            <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-xs">
-              <h3 className="text-sm xs:text-base font-bold text-brand-primary mb-3 flex items-center gap-2">
+            <div className="bg-white p-4.5 sm:p-5 rounded-xl border border-slate-100 shadow-xs">
+              <h3 className="text-sm xs:text-base font-bold text-brand-primary mb-3 flex items-center gap-2 break-keep">
                 <span className="w-1.5 h-4 bg-brand-accent rounded-full"></span>
                 주요 점검 대상 부위
               </h3>
@@ -80,15 +80,15 @@ export default function LeakPath({ region, service }: LeakPathProps) {
                 {inspectionPoints.map((pt, idx) => (
                   <li key={idx} className="flex items-start gap-1.5 py-0.5">
                     <span className="text-brand-accent font-extrabold">✓</span>
-                    <span>{pt}</span>
+                    <span className="break-keep">{pt}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* 작업 범위 */}
-            <div className="bg-white p-5 rounded-xl border border-slate-100 shadow-xs">
-              <h3 className="text-sm xs:text-base font-bold text-brand-primary mb-3 flex items-center gap-2">
+            <div className="bg-white p-4.5 sm:p-5 rounded-xl border border-slate-100 shadow-xs">
+              <h3 className="text-sm xs:text-base font-bold text-brand-primary mb-3 flex items-center gap-2 break-keep">
                 <span className="w-1.5 h-4 bg-brand-accent rounded-full"></span>
                 핵심 작업 범위
               </h3>
@@ -96,37 +96,37 @@ export default function LeakPath({ region, service }: LeakPathProps) {
                 {workScope.map((ws, idx) => (
                   <li key={idx} className="flex items-start gap-1.5 py-0.5">
                     <span className="text-brand-accent font-extrabold">▶</span>
-                    <span>{ws}</span>
+                    <span className="break-keep">{ws}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* 시공 전 필수 주의사항 */}
-            <div className="bg-red-50/50 p-5 rounded-xl border border-red-100/60">
-              <h3 className="text-xs xs:text-sm font-bold text-red-900 mb-2 flex items-center gap-1.5">
-                <svg className="w-4 h-4 text-red-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <div className="bg-red-50/50 p-4.5 sm:p-5 rounded-xl border border-red-100/60">
+              <h3 className="text-xs xs:text-sm font-bold text-red-900 mb-2 flex items-center gap-1.5 break-keep">
+                <svg className="w-4 h-4 text-red-700 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 시공 전 필수 주의사항
               </h3>
-              <p className="text-xs xs:text-sm text-red-800 leading-relaxed">
+              <p className="text-xs xs:text-sm text-red-800 leading-relaxed break-keep">
                 {cautionText}
               </p>
             </div>
 
-            {/* 아코디언 상세 기술 설명 */}
+            {/* 기존 아코디언 상세 기술 설명 영역 활용 */}
             <details className="bg-white rounded-xl border border-slate-100 shadow-xs group transition-all">
               <summary className="font-bold text-xs xs:text-sm text-brand-primary p-4 cursor-pointer list-none flex items-center justify-between select-none">
                 <span>자세한 기술 시공 방법 보기</span>
                 <span className="text-xs text-brand-accent font-semibold group-open:hidden">펼치기 ▼</span>
                 <span className="text-xs text-gray-400 font-semibold hidden group-open:inline">접기 ▲</span>
               </summary>
-              <div className="px-4 pb-4 pt-1 border-t border-slate-50 text-xs xs:text-sm text-gray-600 leading-relaxed">
-                <p className="mb-2">
+              <div className="px-4 pb-4 pt-1 border-t border-slate-50 text-xs xs:text-sm text-gray-600 leading-relaxed space-y-2">
+                <p className="font-medium text-gray-700">
                   {technicalDescription}
                 </p>
-                <p className="text-gray-400 text-[11px]">
+                <p className="text-gray-400 text-[11px] pt-1">
                   * 본 보수 설명은 {provinceRegionText} 건물 특성에 근거하여 작성된 기밀 시공 표준 매뉴얼입니다.
                 </p>
               </div>

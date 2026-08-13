@@ -76,11 +76,11 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* 섹션 헤더 */}
-        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
-          <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+          <h2 className="text-xl xs:text-2xl sm:text-3xl font-extrabold text-brand-primary tracking-tight mb-2.5 sm:mb-3 break-keep">
             {isDynamic ? `${serviceKeyword} 현장 시공 사례` : "레인가드 현장 시공 사례"}
           </h2>
-          <p className="mt-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
+          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed break-keep">
             창틀 코킹부터 외벽·옥상방수까지, 건물별 누수 취약부와 실제 작업 내용을 소개합니다.
           </p>
         </div>
@@ -107,9 +107,24 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
               return (
                 <div className="bg-slate-50 border border-slate-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-7 hover:shadow-md transition-shadow">
                   {/* PC: 2열 배치 / MO: 1열 배치 */}
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-5 lg:gap-8 items-start">
                     
-                    {/* 대표 이미지 영역 */}
+                    {/* 1. 모바일 뷰: 현장 유형 태그 & 뱃지 + 제목 (이미지 위로 배치하여 현장 파악 극대화) */}
+                    <div className="md:hidden">
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className="text-[11px] font-bold text-brand-accent bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-md">
+                          {heroCase.buildingType}
+                        </span>
+                        <span className="text-[11px] text-gray-600 font-semibold bg-white border border-slate-200/80 px-2.5 py-0.5 rounded-md">
+                          {heroBadgeText}
+                        </span>
+                      </div>
+                      <h3 className="font-extrabold text-base sm:text-2xl text-brand-primary mb-3 leading-snug tracking-tight break-keep">
+                        {heroCase.title}
+                      </h3>
+                    </div>
+
+                    {/* 대표 이미지 영역 (모바일: 태그/제목 직후 2순위 노출) */}
                     <div className="md:col-span-5 lg:col-span-5 w-full">
                       {heroImageUrl && (
                         <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-slate-200/60 shadow-xs">
@@ -128,52 +143,51 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
                       )}
                     </div>
 
-                    {/* 대표 정보 영역 */}
+                    {/* 정보 영역 */}
                     <div className="md:col-span-7 lg:col-span-7 flex flex-col justify-between h-full">
                       <div>
-                        {/* 태그 & 뱃지 */}
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <span className="text-xs font-bold text-brand-accent bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-md">
-                            {heroCase.buildingType}
-                          </span>
-                          <span className="text-xs text-gray-600 font-semibold bg-white border border-slate-200/80 px-2.5 py-0.5 rounded-md">
-                            {heroBadgeText}
-                          </span>
-                          {heroCase.categoryLabels.map((tag, idx) => (
-                            <span key={idx} className="hidden sm:inline-block text-[11px] text-gray-400 font-medium">
-                              #{tag}
+                        {/* PC 전용: 헤더 태그 & 뱃지 + 제목 */}
+                        <div className="hidden md:block">
+                          <div className="flex flex-wrap items-center gap-2 mb-3">
+                            <span className="text-xs font-bold text-brand-accent bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-md">
+                              {heroCase.buildingType}
                             </span>
-                          ))}
+                            <span className="text-xs text-gray-600 font-semibold bg-white border border-slate-200/80 px-2.5 py-0.5 rounded-md">
+                              {heroBadgeText}
+                            </span>
+                            {heroCase.categoryLabels.map((tag, idx) => (
+                              <span key={idx} className="inline-block text-[11px] text-gray-400 font-medium">
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                          <h3 className="font-extrabold text-lg sm:text-2xl lg:text-3xl text-brand-primary mb-3 leading-snug tracking-tight break-keep">
+                            {heroCase.title}
+                          </h3>
                         </div>
 
-                        {/* 대표 사례 제목 */}
-                        <h3 className="font-extrabold text-lg sm:text-2xl lg:text-3xl text-brand-primary mb-3 leading-snug tracking-tight">
-                          {heroCase.title}
-                        </h3>
+                        {/* 시공 결과 / 핵심 요약 한 문장 (이미지 직후 3순위 노출) */}
+                        <div className="mt-3 md:mt-0 bg-white p-3 sm:p-3.5 rounded-xl border border-slate-200/60 flex items-center justify-between text-xs sm:text-sm">
+                          <span className="text-gray-500 font-semibold">시공 결과</span>
+                          <span className="font-extrabold text-brand-accent">{heroCase.result}</span>
+                        </div>
 
-                        {/* 모바일 요약 */}
-                        {heroCase.mobileSummary && (
-                          <p className="text-xs sm:text-sm text-gray-600 mb-4 bg-white p-3 rounded-xl border border-slate-200/60 leading-relaxed">
-                            {heroCase.mobileSummary}
-                          </p>
-                        )}
-
-                        {/* 상세 내역 (PC는 항상 표시, MO는 details 접힘 가능) */}
-                        <div className="hidden md:block space-y-2 text-xs sm:text-sm text-gray-700 bg-white p-4 rounded-xl border border-slate-200/60">
+                        {/* PC 전용: 상세 내역 노출 */}
+                        <div className="hidden md:block space-y-2 text-xs sm:text-sm text-gray-700 bg-white p-4 rounded-xl border border-slate-200/60 mt-3">
                           <p><strong className="text-brand-primary font-bold">확인 증상:</strong> {heroCase.symptom}</p>
                           <p><strong className="text-brand-primary font-bold">점검 내용:</strong> {heroCase.inspection}</p>
                           <p><strong className="text-brand-primary font-bold">시공 작업:</strong> {heroCase.work}</p>
                         </div>
 
-                        {/* 모바일 전용 접힘 세부정보 (<details> 활용으로 초기 HTML 포함) */}
-                        <details className="md:hidden group mt-3 pt-3 border-t border-slate-200/60">
-                          <summary className="text-xs text-brand-accent font-bold cursor-pointer flex items-center justify-between list-none select-none py-1">
+                        {/* 모바일 전용: 원인 점검 및 시공 세부내역 Accordion (더 깔끔한 margin 구분 사용) */}
+                        <details className="md:hidden group mt-3">
+                          <summary className="text-xs text-brand-accent font-bold cursor-pointer flex items-center justify-between list-none select-none py-1.5 px-1">
                             <span>원인 점검 및 시공 세부내역</span>
                             <svg className="w-4 h-4 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
                           </summary>
-                          <div className="mt-2.5 space-y-2 text-xs text-gray-700 bg-white p-3.5 rounded-xl border border-slate-200/60 leading-relaxed">
+                          <div className="mt-2 space-y-2 text-xs text-gray-700 bg-white p-3.5 rounded-xl border border-slate-200/60 leading-relaxed">
                             <p><strong className="text-brand-primary">확인 증상:</strong> {heroCase.symptom}</p>
                             <p><strong className="text-brand-primary">점검 내용:</strong> {heroCase.inspection}</p>
                             <p><strong className="text-brand-primary">시공 작업:</strong> {heroCase.work}</p>
@@ -181,11 +195,6 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
                         </details>
                       </div>
 
-                      {/* 결과 마감 */}
-                      <div className="mt-4 pt-3 border-t border-slate-200/80 flex justify-between items-center text-xs sm:text-sm">
-                        <span className="text-gray-500 font-semibold">시공 결과</span>
-                        <span className="font-extrabold text-brand-accent">{heroCase.result}</span>
-                      </div>
                     </div>
 
                   </div>
@@ -195,7 +204,7 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
 
             {/* 2. 보조 사례 4개 그리드 (PC 2x2 / MO 1열) */}
             {secondaryCases.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                 {secondaryCases.map((item) => {
                   const badgeText = getBadgeLabel(item);
                   const caseImageUrl = item.imageKey && item.imageKey in imageSlots 
@@ -206,11 +215,11 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
                   return (
                     <div 
                       key={item.id}
-                      className="bg-slate-50 border border-slate-200/70 rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:shadow-xs transition-shadow"
+                      className="bg-slate-50 border border-slate-200/70 rounded-2xl p-4.5 sm:p-6 flex flex-col justify-between hover:shadow-xs transition-shadow"
                     >
                       <div>
-                        {/* 헤더 태그 및 뱃지 */}
-                        <div className="flex justify-between items-center mb-3">
+                        {/* 1. 현장 유형 태그 & 뱃지 */}
+                        <div className="flex justify-between items-center mb-2">
                           <span className="text-[11px] font-bold text-brand-accent bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-md">
                             {item.buildingType}
                           </span>
@@ -219,14 +228,14 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
                           </span>
                         </div>
 
-                        {/* 보조 사례 제목 */}
-                        <h3 className="font-extrabold text-base sm:text-xl text-brand-primary mb-3 leading-snug">
+                        {/* 2. 보조 사례 핵심 제목 */}
+                        <h3 className="font-extrabold text-base sm:text-xl text-brand-primary mb-3 leading-snug break-keep">
                           {item.title}
                         </h3>
 
-                        {/* 이미지 렌더링 */}
+                        {/* 3. 현장 이미지 */}
                         {caseImageUrl && (
-                          <div className="mb-4 overflow-hidden rounded-xl border border-slate-200/60 shadow-xs">
+                          <div className="mb-3 overflow-hidden rounded-xl border border-slate-200/60 shadow-xs">
                             <SafeImage 
                               src={caseImageUrl} 
                               alt={item.alt || item.title} 
@@ -236,21 +245,20 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
                           </div>
                         )}
 
-                        {/* 모바일 축약 요약 */}
-                        {item.mobileSummary && (
-                          <p className="text-xs sm:text-sm text-gray-600 mb-3 bg-white p-2.5 rounded-lg border border-slate-200/50 leading-relaxed">
-                            {item.mobileSummary}
-                          </p>
-                        )}
+                        {/* 4. 핵심 결과 요약 (이미지 직후 1문장) */}
+                        <div className="bg-white p-2.5 rounded-lg border border-slate-200/50 flex justify-between items-center text-xs">
+                          <span className="text-gray-500 font-semibold">결과</span>
+                          <span className="font-bold text-brand-accent">{item.result}</span>
+                        </div>
 
-                        {/* 시공 내용 요약 (PC 노출) */}
-                        <div className="hidden sm:block space-y-1.5 text-xs text-gray-600 bg-white p-3 rounded-lg border border-slate-200/50">
+                        {/* PC 노출: 진행 작업 요약 */}
+                        <div className="hidden sm:block space-y-1.5 text-xs text-gray-600 bg-white p-3 rounded-lg border border-slate-200/50 mt-3">
                           <p><strong>진행 작업:</strong> {item.work}</p>
                         </div>
 
-                        {/* 모바일 전용 접힘 세부정보 (<details> 활용으로 초기 HTML 포함) */}
-                        <details className="sm:hidden group mt-2 pt-2 border-t border-slate-200/50">
-                          <summary className="text-[11px] text-brand-accent font-bold cursor-pointer flex items-center justify-between list-none select-none py-1">
+                        {/* 모바일 전용 접힘 세부정보 Accordion (과도한 구분선 수평선 제거하고 spacing으로 처리) */}
+                        <details className="sm:hidden group mt-2.5">
+                          <summary className="text-[11px] text-brand-accent font-bold cursor-pointer flex items-center justify-between list-none select-none py-1 px-0.5">
                             <span>원인 점검 및 시공 세부내역</span>
                             <svg className="w-3.5 h-3.5 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -264,11 +272,6 @@ export default function WorkCases({ region, service }: WorkCasesProps) {
                         </details>
                       </div>
 
-                      {/* 결과 마감 */}
-                      <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs sm:text-sm">
-                        <span className="text-gray-500 font-semibold">결과</span>
-                        <span className="font-bold text-brand-accent">{item.result}</span>
-                      </div>
                     </div>
                   );
                 })}

@@ -125,14 +125,21 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
       <div className="relative z-20 max-w-[1140px] mx-auto px-4 sm:px-6">
         
         {/* 상단 헤더 영역 */}
-        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-20">
           <span className="inline-block px-3.5 py-1 text-xs font-bold text-brand-accent bg-blue-950/80 border border-brand-accent/30 rounded-full mb-3 tracking-tight">
             {processData.eyebrow}
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
-            {region ? `${regionName} ${processData.title}` : processData.title}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-snug sm:leading-tight mb-3 sm:mb-4 break-keep">
+            {region ? (
+              <>
+                <span className="block sm:inline">{regionName} {serviceKeyword}</span>{" "}
+                <span className="block sm:inline">3단계 작업 과정</span>
+              </>
+            ) : (
+              processData.title
+            )}
           </h2>
-          <p className="mt-3 text-sm sm:text-base text-gray-300 leading-relaxed">
+          <p className="mt-2.5 sm:mt-3 text-sm sm:text-base text-gray-300 leading-relaxed break-keep">
             {processData.description}
           </p>
         </div>
@@ -158,22 +165,22 @@ export default function WorkProcess({ region, service }: WorkProcessProps) {
                 </div>
 
                 {/* 2행: 단계 제목 (최대 2줄, 18~20px) */}
-                <h3 className="text-lg font-bold text-white mb-2 leading-snug tracking-tight">
+                <h3 className="text-base sm:text-lg font-bold text-white mb-1.5 leading-snug tracking-tight break-keep">
                   {step.title}
                 </h3>
 
-                {/* 3행: 단계 설명 (최대 3~4줄, 14~15px) */}
-                <p className="text-sm text-gray-300 leading-relaxed mb-3 line-clamp-4">
+                {/* 3행: 단계 설명 (모바일 빠른 파악용 간결한 마감) */}
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-2.5 break-keep">
                   {step.description}
                 </p>
 
-                {/* 4행: 주요 포인트 하이라이트 태그 (모바일 전용 간결 배치) */}
+                {/* 4행: 주요 포인트 하이라이트 태그 */}
                 {step.highlights && step.highlights.length > 0 && (
                   <ul className="space-y-1">
                     {step.highlights.map((item, hIdx) => (
-                      <li key={hIdx} className="flex items-center gap-2 text-xs text-gray-400">
-                        <span className="w-1.5 h-1.5 rounded-full bg-brand-accent/80 flex-shrink-0" />
-                        <span>{item}</span>
+                      <li key={hIdx} className="flex items-center gap-1.5 text-[11.5px] sm:text-xs text-gray-400">
+                        <span className="w-1 h-1 rounded-full bg-brand-accent/80 flex-shrink-0" />
+                        <span className="break-keep">{item}</span>
                       </li>
                     ))}
                   </ul>

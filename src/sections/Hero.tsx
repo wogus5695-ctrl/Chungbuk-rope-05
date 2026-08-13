@@ -158,13 +158,21 @@ export default function Hero({ region, service }: HeroProps) {
           </span>
           
           {/* H1 메인 타이틀 */}
-          <h1 className="text-[31px] xs:text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-[800] text-white leading-[1.14] sm:leading-[1.16] tracking-[-0.035em] mb-4 select-none break-keep">
+          <h1 className="text-[31px] xs:text-[32px] sm:text-[36px] md:text-[42px] lg:text-[48px] font-[800] text-white leading-[1.14] sm:leading-[1.16] tracking-[-0.035em] mb-5 sm:mb-4 select-none break-keep">
             {getH1Title()}
           </h1>
           
-          {/* 설명글 */}
-          <p className="text-[15px] sm:text-[16px] text-gray-200 leading-[1.5] sm:leading-[1.6] tracking-[-0.015em] max-w-lg mb-6 sm:mb-8 line-clamp-3 font-normal">
-            {getDescription()}
+          {/* 설명글 (MO: 빠른 이해를 돕는 간결한 표현 / PC: 기존 상세 설명 유지) */}
+          <p className="text-[14.5px] sm:text-[16px] text-gray-200 leading-[1.55] sm:leading-[1.6] tracking-[-0.015em] max-w-lg mb-8 sm:mb-8 font-normal break-keep">
+            <span className="block sm:hidden">
+              {isDynamic 
+                ? `${service?.keyword || "창틀"} 상태를 먼저 확인하고 필요한 부분만 안내합니다.`
+                : "창틀과 외벽, 방수층 상태를 점검해 필요한 부분만 안내합니다."
+              }
+            </span>
+            <span className="hidden sm:block">
+              {getDescription()}
+            </span>
           </p>
           
           {/* CTA 버튼 그룹 */}

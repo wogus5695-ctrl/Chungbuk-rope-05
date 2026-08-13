@@ -179,13 +179,26 @@ export default function Footer({ region, service }: FooterProps) {
           )}
           <div className="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-900/90 to-transparent z-10" />
 
-          <div className="relative z-20 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="relative z-20 flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6">
             <div>
-              <h3 className="text-white text-base sm:text-lg lg:text-xl font-extrabold mb-2 tracking-tight">
-                {getCtaTitle()}
+              <h3 className="text-white text-base sm:text-lg lg:text-xl font-extrabold mb-2 tracking-tight break-keep">
+                <span className="block sm:hidden">
+                  {isDynamic 
+                    ? `${regionName} ${serviceName}, 반복되는 증상부터 확인하세요.`
+                    : "충북 빗물누수·창틀코킹, 반복되는 증상부터 확인하세요."
+                  }
+                </span>
+                <span className="hidden sm:block">
+                  {getCtaTitle()}
+                </span>
               </h3>
-              <p className="text-xs sm:text-sm text-gray-400 max-w-xl">
-                전문 로프 시공팀의 밀착 진단과 확실한 사후 AS 보장을 약속드립니다. 사진을 함께 보내주시면 정확한 실시간 가견적 진단이 편리합니다.
+              <p className="text-xs sm:text-sm text-gray-400 max-w-xl leading-relaxed break-keep">
+                <span className="block sm:hidden">
+                  현장 사진을 보내주시면 전문 시공팀이 빠르게 유입 가능 부위를 진단해 드립니다.
+                </span>
+                <span className="hidden sm:block">
+                  전문 로프 시공팀의 밀착 진단과 확실한 사후 AS 보장을 약속드립니다. 사진을 함께 보내주시면 정확한 실시간 가견적 진단이 편리합니다.
+                </span>
               </p>
             </div>
             
@@ -243,22 +256,17 @@ export default function Footer({ region, service }: FooterProps) {
           </div>
         )}
 
-        {/* 네이버/구글 검색로봇 문서 대표 이미지 수집 보조 1회 배치 */}
-        <div className="mt-6 pt-4 border-t border-gray-800/60 flex flex-col items-start gap-2">
-          <span className="text-[11px] text-gray-500 font-semibold tracking-wider">
-            충북 레인가드 검색 대표 썸네일
-          </span>
-          <div className="w-full max-w-[180px] sm:max-w-[220px] rounded-lg overflow-hidden border border-gray-800 bg-gray-900/60 p-1">
-            <img
-              src={siteConfig.SEARCH_THUMBNAIL_PATH}
-              width={siteConfig.SEARCH_THUMBNAIL_WIDTH}
-              height={siteConfig.SEARCH_THUMBNAIL_HEIGHT}
-              alt={siteConfig.SEARCH_THUMBNAIL_ALT}
-              loading="eager"
-              decoding="async"
-              className="w-full h-auto object-contain block rounded"
-            />
-          </div>
+        {/* 네이버/구글 검색로봇 문서 대표 이미지 수집 보조 1회 배치 (방문자 화면은 sr-only로 시각적 비노출) */}
+        <div className="sr-only">
+          <span>충북 레인가드 검색 대표 썸네일</span>
+          <img
+            src={siteConfig.SEARCH_THUMBNAIL_PATH}
+            width={siteConfig.SEARCH_THUMBNAIL_WIDTH}
+            height={siteConfig.SEARCH_THUMBNAIL_HEIGHT}
+            alt={siteConfig.SEARCH_THUMBNAIL_ALT}
+            loading="eager"
+            decoding="async"
+          />
         </div>
 
         {/* 구분선 */}
